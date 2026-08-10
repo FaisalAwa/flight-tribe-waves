@@ -1,0 +1,97 @@
+/* ═══════════════════════════════════════════════════════════════
+   DESIGN TOKENS — FLIGHT TRIBE  ·  "sterile vault, violent jewelry"
+   Critique-approved direction (see _workspace/DIRECTION.md).
+   The SITE is cold silver/near-black and near-empty; the PRODUCT gem is
+   the only saturated colour on any given screen. Contrast, not texture.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─── Core canvas (strictly B&W / silver) ─────────────────────── */
+  --c-void:    #0A0A0B;                 /* near-black (NOT pure #000) — base bg */
+  --c-pit:     #050506;                 /* deepest black — hero void, overlays  */
+  --c-dark:    #141416;                 /* charcoal panel bg                    */
+  --c-surface: #EDEBE6;                 /* bone / paper off-white (light blocks) */
+  --c-white:   #F6F5F2;
+  --c-bone:    #EDEBE6;                 /* alias — primary light ink on dark    */
+  --c-text:    #EDEBE6;                 /* primary text on void                 */
+  --c-muted:   rgba(237,235,230,0.58);  /* secondary/caption (AA ~5.6:1 on void) */
+  --c-faint:   rgba(237,235,230,0.30);  /* hairlines, disabled                  */
+  --c-line:    rgba(237,235,230,0.14);  /* grid rules / hairline borders        */
+
+  /* ─── Chrome / silver (brushed-metal UI accents) ──────────────── */
+  --c-chrome:  #C8C9CE;                 /* polished silver text/lines           */
+  --c-steel:   #7E8088;                 /* mid steel                            */
+  --grad-chrome: linear-gradient(180deg,#E7E8EC 0%,#A9ABB2 38%,#6E7076 62%,#C3C4C9 100%);
+  --grad-brush:  linear-gradient(105deg,#17181A 0%,#232427 46%,#141517 100%);
+
+  /* ─── Gem accents — ONE per screen, set by product/category ─────
+     Chrome + both marks stay B&W/silver; the ONLY saturated colour on
+     a screen is --c-gem, remapped per category/product. Never mix.    */
+  --gem-amethyst: #7B4CC4;              /* Jewellery default            */
+  --gem-ruby:     #C0304A;              /* Accessories                  */
+  --gem-emerald:  #1F8A5B;              /* Clothing / alt               */
+  --gem-topaz:    #C98A2B;
+  --c-gem:        var(--gem-amethyst);  /* active accent (overridden per route) */
+  --c-gem-glow:   color-mix(in srgb, var(--c-gem) 55%, transparent);
+  --c-accent:     var(--c-chrome);      /* back-compat alias (boilerplate Nav/Footer until rewritten) */
+
+  /* Gem accents are used for BORDERS / ICONS / GLOW (need only 3:1) at full
+     saturation. For TEXT (needs 4.5:1 on --c-void) use these lighter tints —
+     the saturated gem alone fails AA on near-black (a11y audit #1). */
+  --gem-amethyst-text: #A986E0;
+  --gem-ruby-text:     #DE7183;
+  --gem-emerald-text:  #38B577;
+  --gem-topaz-text:    #D8A24B;
+  --c-gem-text:        var(--gem-amethyst-text);  /* remapped per [data-gem] */
+
+  /* ─── Typography ──────────────────────────────────────────────
+     Anton (brutal condensed display, edge-clipped) + Space Grotesk
+     (grotesk body/commerce). Hallmark = tracked uppercase micro-label.
+     <link> added in index.html. NO blackletter / costume tribal font. */
+  --f-display: 'Anton', 'Arial Narrow', sans-serif;
+  --f-body:    'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+  --f-hall:    'Space Grotesk', ui-sans-serif, sans-serif; /* used at 0.2em tracking */
+
+  /* Type scale — fluid clamp. Display runs large + clips the viewport. */
+  --t-hero:    clamp(72px, 13vw, 240px);
+  --t-h1:      clamp(44px, 7vw, 120px);
+  --t-h2:      clamp(30px, 4vw, 72px);
+  --t-h3:      clamp(20px, 2.2vw, 30px);
+  --t-sub:     clamp(15px, 1.4vw, 19px);
+  --t-body:    clamp(13px, 1vw, 15px);
+  --t-label:   clamp(10px, 0.8vw, 12px);   /* hallmark micro-label base */
+
+  /* ─── Spacing (space/scale separates sections — no dividers) ──── */
+  --s-xs:  clamp(16px, 2vw, 28px);
+  --s-sm:  clamp(32px, 4vw, 52px);
+  --s-md:  clamp(64px, 8vw, 120px);
+  --s-lg:  clamp(100px, 13vw, 220px);      /* the "emptiness" between sections */
+  --gutter: clamp(20px, 5vw, 72px);
+  --max-w:  1560px;
+  --col:    12;                            /* base grid columns */
+
+  /* ─── Hallmark stamp helper (compose in components) ───────────── */
+  --hall-track: 0.2em;
+
+  /* ─── Easing ──────────────────────────────────────────────────── */
+  --ease-out:  cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-ui:   cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-expo: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-slam: cubic-bezier(0.22, 1, 0.36, 1);   /* "Struck"/"Ignite" heavy ease */
+}
+
+/* ─── Ember treatment — the ruby smoulder in the cold vault ───────
+   A deep, low-intensity bloom. Ruby is drowned into the void so it
+   reads as a smouldering ember in the dark, NEVER a lit gradient.
+   Anchors the body background bloom and the footer glow. Append-only. */
+:root {
+  --ember-core: color-mix(in srgb, var(--gem-ruby) 40%, var(--c-void));  /* deep ruby-black core (near-solid) */
+  --ember-glow: color-mix(in srgb, var(--gem-ruby) 20%, transparent);    /* low-alpha bloom              */
+  --ember-haze: color-mix(in srgb, var(--gem-ruby) 9%,  transparent);    /* faint outer haze            */
+}
+
+/* Per-category gem remap — apply data-gem on a route wrapper. */
+[data-gem='amethyst'] { --c-gem: var(--gem-amethyst); --c-gem-text: var(--gem-amethyst-text); }
+[data-gem='ruby']     { --c-gem: var(--gem-ruby);     --c-gem-text: var(--gem-ruby-text); }
+[data-gem='emerald']  { --c-gem: var(--gem-emerald);  --c-gem-text: var(--gem-emerald-text); }
+[data-gem='topaz']    { --c-gem: var(--gem-topaz);    --c-gem-text: var(--gem-topaz-text); }

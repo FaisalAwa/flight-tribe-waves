@@ -1,0 +1,82 @@
+/* Tailwind v4 — single import activates all utilities */
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./site.css";
+
+/* SKILL: Update Google Fonts link in index.html per client before using --f-display / --f-body */
+
+/* ─── Reset ────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  /* Let Lenis handle smooth scroll — DO NOT use scroll-behavior: smooth */
+  scroll-behavior: auto;
+}
+
+body {
+  /* Base stays the cold void so all contrast/AA math still holds. */
+  background-color: var(--c-void);
+  color: var(--c-text);
+  font-family: var(--f-body);
+  font-size: var(--t-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* ─── Ruby-ember bloom ─────────────────────────────────────────────
+   A fixed, full-viewport smoulder that sits BEHIND all content
+   (z-index:-1, non-interactive). Two soft blooms anchored off-centre
+   (deep bottom-left + a fainter top-right haze) drowned in the void
+   so it reads as a dark ember, not a lit gradient. Sections that paint
+   their own --c-void / --c-pit backgrounds cover it; it only breathes
+   through the transparent gaps between them. */
+body::before {
+  content: "";
+  position: fixed;
+  /* overscanned so the slow drift never exposes a hard edge */
+  inset: -15%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(58% 55% at 12% 108%, var(--ember-glow) 0%, transparent 62%),
+    radial-gradient(48% 46% at 92% -8%,  var(--ember-haze) 0%, transparent 58%);
+  animation: ember-drift 52s var(--ease-ui) infinite;
+}
+
+@keyframes ember-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(1.5%, -1.2%, 0) scale(1.05); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}
+
+img, video {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+ul, ol {
+  list-style: none;
+}
