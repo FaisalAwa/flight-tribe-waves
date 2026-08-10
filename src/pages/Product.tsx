@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom'
 import { Link, useParams } from 'react-router-dom'
 import gsap from 'gsap'
 import { MagnifyingGlassPlus, X } from '@phosphor-icons/react'
-import { Hallmark, EyeSigil, DemoBadge, ProductCard } from '@/components'
+import { Hallmark, EyeSigil, ProductCard } from '@/components'
 import { ElectroFrame } from '@/components/ElectroFrame'
 import { productBySlug, productsByCategory, products } from '@/data/products'
 import { formatPrice } from '@/lib/format'
@@ -18,13 +18,13 @@ import NotFound from './NotFound'
    the CTA instead of a wall of body copy competing for attention.
    Edge = typography + the eye-stamp confirm. */
 
-/** "HAND-CAST" → "Hand-cast" — real per-product hallmark data, never invented
-    per-product copy. Falls back to a neutral, still-true label if a product
-    ever ships without a HAND-* hallmark tag. */
-function craftVerb(hallmark: string[]): string {
-  const tag = hallmark.find((h) => h.startsWith('HAND-'))
-  if (!tag) return 'Hand-finished'
-  return tag.charAt(0) + tag.slice(1).toLowerCase()
+/** "Hand-forged" → the verb in the production note. Driven by the piece's own
+    Shopify tag, so the claim is only made for pieces the catalogue actually
+    makes it for — anything else gets no production note at all, rather than an
+    invented one. */
+function craftVerb(tag: string | undefined): string | null {
+  if (!tag || !/^hand-/i.test(tag)) return null
+  return tag.charAt(0).toUpperCase() + tag.slice(1).toLowerCase()
 }
 
 export default function Product() {
@@ -33,7 +33,6 @@ export default function Product() {
   const root = useRef<HTMLDivElement>(null)
   const [shot, setShot] = useState(0)
   const [size, setSize] = useState<string | null>(null)
-  const [karat, setKarat] = useState<string>('925 SILVER')
   const [fired, setFired] = useState(false)
   const [ripple, setRipple] = useState<{ x: number; y: number; key: number } | null>(null)
   const { add, count } = useCart()
@@ -48,7 +47,6 @@ export default function Product() {
     if (!product) { setZoomOpen(false); return }
     setShot(0)
     setSize(null)
-    setKarat('925 SILVER')
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const ctx = gsap.context(() => {
       gsap.from('.pdp__reveal', { y: reduce ? 0 : 32, opacity: reduce ? 1 : 0, duration: reduce ? 0.01 : 0.8, ease: 'power3.out', stagger: reduce ? 0 : 0.08 })
@@ -56,16 +54,10 @@ export default function Product() {
     return () => ctx.revert()
   }, [product])
 
-  // Price multiplier by karat — 925 silver is always the base
-  const computedPrice = (() => {
-    if (!product) return 0
-    switch (karat) {
-      case '10KT GOLD': return Math.round(product.priceUSD * 2.2)
-      case '14KT GOLD': return Math.round(product.priceUSD * 3.5)
-      case '18KT GOLD': return Math.round(product.priceUSD * 5.0)
-      default:          return product.priceUSD
-    }
-  })()
+  /* The price is whatever the Shopify variant costs — there is no karat
+     multiplier any more. Every piece in the catalogue is a single Shopify
+     variant at one real list price; a metal selector here would have quoted
+     figures the store cannot actually charge. */
 
   // focus trap + Escape-to-close + scroll lock, matching Nav's INDEX overlay
   useEffect(() => {
@@ -127,26 +119,24 @@ export default function Product() {
   const related = [...sameCategory, ...crossCategory].slice(0, 3)
   const relatedSpan = related.length >= 3 ? 4 : related.length === 2 ? 6 : 12
 
-  const craft = craftVerb(product.hallmark)
+  const craft = craftVerb(product.tag)
   const needsSize = !!(product.sizes && product.sizes.length > 0)
 
   const onAdd = () => {
     if (needsSize && !size) return  // guard: no sizeless made-to-order ring
 
-    // Build unique cart id: product + optional size + karat variant
+    // Build unique cart id: product + optional size
     const idParts = [product.id]
     if (size) idParts.push(size)
-    idParts.push(karat.replace(/\s+/g, '-'))
 
-    const specParts = [product.spec]
-    if (size) specParts.push(`Size ${size}`)
-    specParts.push(karat)
+    const specParts = [product.spec, size ? `Size ${size}` : null].filter(Boolean) as string[]
 
     add({
       id: idParts.join('-'),
       slug: product.slug, name: product.name,
-      spec: specParts.join(' · '),
-      image: product.image, priceUSD: computedPrice, isDemo: product.isDemo, gem: `var(--gem-${product.gem})`,
+      spec: specParts.length ? specParts.join(' · ') : undefined,
+      image: product.image, priceUSD: product.priceUSD, gem: `var(--gem-${product.gem})`,
+      variantId: product.variantId,
     })
     setFired(false)
     requestAnimationFrame(() => setFired(true))
@@ -203,8 +193,8 @@ export default function Product() {
             .ft-zoom-modal__close:hover, .ft-zoom-modal__close:focus-visible { background: var(--c-gem); color: var(--c-void); }
           `}</style>
           <ElectroFrame>
-            <div className={`frame${product.cut ? ' frame--cut' : ''}`} style={{ aspectRatio: '1', borderRadius: 2, position: 'relative' }}>
-              <img className={`frame__img${product.cut ? ' frame__img--cut' : ''}`} src={gallery[shot]} alt={product.name} style={{ objectPosition: product.focal }} />
+            <div className={"frame"} style={{ aspectRatio: '1', borderRadius: 2, position: 'relative' }}>
+              <img className={"frame__img"} src={gallery[shot]} alt={product.name} style={{ objectPosition: product.focal }} />
               <span className="ignite" data-fire={fired ? 'true' : 'false'}>
                 <EyeSigil size={130} weight={1.1} gem={`var(--gem-${product.gem})`} />
               </span>
@@ -221,9 +211,9 @@ export default function Product() {
               {gallery.map((g, i) => (
                 <button
                   key={g} onClick={() => setShot(i)} aria-label={`View ${i + 1}`}
-                  className={`frame${product.cut ? ' frame--cut' : ''}`} style={{ width: 74, height: 74, borderRadius: 2, outline: i === shot ? '1px solid var(--c-gem)' : 'none' }}
+                  className={"frame"} style={{ width: 74, height: 74, borderRadius: 2, outline: i === shot ? '1px solid var(--c-gem)' : 'none' }}
                 >
-                  <img className={`frame__img${product.cut ? ' frame__img--cut' : ''}`} src={g} alt="" style={{ objectPosition: product.focal }} />
+                  <img className={"frame__img"} src={g} alt="" style={{ objectPosition: product.focal }} />
                 </button>
               ))}
             </div>
@@ -243,32 +233,17 @@ export default function Product() {
           <div>
             {product.tag && <Hallmark className="eyebrow gem">{product.tag}</Hallmark>}
             <h1 className="display" style={{ fontSize: 'clamp(26px, 3.2vw, 46px)', margin: '10px 0 6px' }}>{product.name}</h1>
-            <p className="card__spec">{product.spec}</p>
+            {product.spec && <p className="card__spec">{product.spec}</p>}
           </div>
 
           <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span className="display" style={{ fontSize: 'clamp(30px,3.4vw,44px)' }}>{formatPrice(computedPrice)}</span>
-            {product.isDemo && <DemoBadge />}
+            <span className="display" style={{ fontSize: 'clamp(30px,3.4vw,44px)' }}>{formatPrice(product.priceUSD)}</span>
           </p>
 
-          {/* ── KARAT ──────────────────────────────────────────────── */}
-          <div className="pdp-sizes">
-            <div className="pdp-sizes__head">
-              <Hallmark className="pdp-fulfill__label">Karat</Hallmark>
-              <Hallmark className="gem">{karat}</Hallmark>
-            </div>
-            <div className="pdp-sizes__row" role="radiogroup" aria-label="Select karat">
-              {(['10KT GOLD', '14KT GOLD', '18KT GOLD', '925 SILVER'] as const).map((k) => (
-                <button
-                  key={k} type="button" role="radio" aria-checked={karat === k}
-                  className="pdp-size pdp-karat" data-active={karat === k}
-                  onClick={() => setKarat(k)}
-                >
-                  {k}
-                </button>
-              ))}
-            </div>
-          </div>
+          {/* The karat selector that used to sit here quoted 10/14/18KT prices
+              derived from a multiplier, not from the store. Each piece is one
+              Shopify variant at one real price, so it was removed rather than
+              left showing figures checkout could never honour. */}
 
           {/* Size — only where size is load-bearing (rings). Add-to-Bag is
               gated until one is chosen so a made-to-order ring can't be
@@ -294,10 +269,12 @@ export default function Product() {
 
           {/* Honest production note — kept tight to the CTA so price → note →
               button read as one unit (no heavy block between them). */}
-          <p className="pdp-note">
-            <EyeSigil size={14} gem="var(--c-gem)" title="" />
-            <span>{craft} to order — one piece at a time on our bench. Please allow extra time for handmade work.</span>
-          </p>
+          {craft && (
+            <p className="pdp-note">
+              <EyeSigil size={14} gem="var(--c-gem)" title="" />
+              <span>{craft} to order — one piece at a time on our bench. Please allow extra time for handmade work.</span>
+            </p>
+          )}
 
           <div>
             <button
@@ -319,7 +296,9 @@ export default function Product() {
 
           {/* Hallmarked authenticity — reinforcement AFTER the CTA (the metal's
               real provenance), lightened so it no longer out-weights price/CTA
-              in the column. */}
+              in the column. Rendered only for pieces whose hallmark Shopify
+              actually records, so the stamps are never invented. */}
+          {product.hallmark && product.hallmark.length > 0 && (
           <div className="pdp-trust">
             <div className="pdp-trust__head">
               <EyeSigil size={20} weight={1.2} gem="var(--c-gem)" title="" />
@@ -334,20 +313,24 @@ export default function Product() {
               ))}
             </div>
           </div>
+          )}
 
           {/* Shipping / care / fit — every line a TRUE statement (no invented
               policy, no "TBC" cluster at the point of decision). USA, tracked
-              and made-to-order are all real; the only DEMO marker left in the
-              column is the required price placeholder above. */}
+              and made-to-order are all real; prices are now the store's own. */}
           <div className="pdp-fulfill">
             <div className="pdp-fulfill__row">
               <Hallmark className="pdp-fulfill__label">Shipping</Hallmark>
-              <span className="pdp-fulfill__val">Made to order in our USA workshop, then shipped tracked once it's cast.</span>
+              <span className="pdp-fulfill__val">Made to order in our USA workshop, then shipped tracked.</span>
             </div>
-            <div className="pdp-fulfill__row">
-              <Hallmark className="pdp-fulfill__label">Care</Hallmark>
-              <span className="pdp-fulfill__val">Sterling silver — soft cloth only. Chlorine and household chemicals are the enemy; keep them apart.</span>
-            </div>
+            {/* Metal care only on the metal pieces — the bandanas are cloth, and
+                the copy used to say "sterling silver" on every product. */}
+            {product.category !== 'clothing' && (
+              <div className="pdp-fulfill__row">
+                <Hallmark className="pdp-fulfill__label">Care</Hallmark>
+                <span className="pdp-fulfill__val">Soft cloth only. Chlorine and household chemicals are the enemy; keep them apart.</span>
+              </div>
+            )}
             <div className="pdp-fulfill__row">
               <Hallmark className="pdp-fulfill__label">Fit</Hallmark>
               <span className="pdp-fulfill__val">Each piece is made to order — message us with any sizing or fit questions before you buy.</span>
@@ -357,13 +340,17 @@ export default function Product() {
       </div>
 
       {/* THE PIECE — full-width description, deliberately below the buy
-          column so it doesn't compete with price/CTA for the eye. */}
-      <div className="wrap pdp__reveal" style={{ marginTop: 'var(--s-md)' }}>
-        <Hallmark className="eyebrow">The Piece</Hallmark>
-        <p className="body" style={{ color: 'var(--c-muted)', marginTop: 14, lineHeight: 1.7, maxWidth: '62ch' }}>
-          {product.description}
-        </p>
-      </div>
+          column so it doesn't compete with price/CTA for the eye. Comes from
+          the product's Shopify description; the block is omitted entirely
+          until that copy is written, rather than filled with invented text. */}
+      {product.description && (
+        <div className="wrap pdp__reveal" style={{ marginTop: 'var(--s-md)' }}>
+          <Hallmark className="eyebrow">The Piece</Hallmark>
+          <p className="body" style={{ color: 'var(--c-muted)', marginTop: 14, lineHeight: 1.7, maxWidth: '62ch' }}>
+            {product.description}
+          </p>
+        </div>
+      )}
 
       {/* RELATED */}
       {related.length > 0 && (
@@ -385,11 +372,11 @@ export default function Product() {
       <div className="pdp-mobilebar">
         <div className="pdp-mobilebar__info">
           <span className="pdp-mobilebar__name">{product.name}</span>
-          <span className="pdp-mobilebar__price">{formatPrice(computedPrice)}</span>
+          <span className="pdp-mobilebar__price">{formatPrice(product.priceUSD)}</span>
         </div>
         <button
           className="btn btn--gem pdp-mobilebar__btn" onClick={onAdd} disabled={needsSize && !size}
-          aria-label={needsSize && !size ? 'Select a ring size first' : `Add ${product.name} to bag — ${formatPrice(computedPrice)}`}
+          aria-label={needsSize && !size ? 'Select a ring size first' : `Add ${product.name} to bag — ${formatPrice(product.priceUSD)}`}
         >
           <EyeSigil size={16} gem="var(--c-gem)" title="" /> {needsSize && !size ? 'Select size' : 'Add to Bag'}
         </button>

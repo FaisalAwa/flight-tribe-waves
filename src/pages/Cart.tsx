@@ -82,7 +82,7 @@ export default function Cart() {
                 <img className="receipt__thumb" src={it.image} alt={it.name} />
                 <div style={{ color: 'var(--c-bone)' }}>
                   <Link to={`/product/${it.slug}`} className="card__name" style={{ fontSize: 20 }}>{it.name}</Link>
-                  <p className="card__spec" style={{ marginTop: 6 }}>{it.spec} {it.isDemo && <DemoBadge />}</p>
+                  {it.spec && <p className="card__spec" style={{ marginTop: 6 }}>{it.spec}</p>}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginTop: 12 }}>
                     <div className="qtybox">
                       <button onClick={() => setQty(it.id, it.qty - 1)} disabled={it.qty <= 1} aria-label={`Decrease quantity, ${it.name}`}>

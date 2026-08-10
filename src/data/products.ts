@@ -1,15 +1,14 @@
 /* ═══════════════════════════════════════════════════════════════
    CATALOGUE — FLIGHT TRIBE
-   Images are REAL client product photography (Media/Product Images →
-   /assets/products/*). They are raw iPhone captures — some still carry
-   phone UI or a red-felt bench ground; each product's `focal` frames the
-   piece inside the vitrine card. FT-P06: crop + cutout + recomposite on the
-   void ground + gem-only saturation before launch (see PLACEHOLDERS.md).
+   GENERATED FILE — do not edit by hand.
+     source : flightribe-aphxmxgd.myshopify.com (Shopify, Admin API 2026-07)
+     rebuild: node scripts/shopify/pull.mjs
 
-   PLACEHOLDER FT-P02: prices + specs are GENERATED indicative values —
-   `isDemo: true` drives the in-UI DEMO marker. The $1,000 medallion price is
-   anchored to the client's own storefront screenshot; the rest are house
-   estimates. Swap for the client's real price list before launch.
+   Every value below is read straight out of Shopify, which was itself loaded
+   from products/Flight-Tribe-Product-Image-Audit … .csv. Prices are the real
+   list prices; images are the Shopify CDN originals. Fields Shopify has no
+   value for (description, spec) are simply absent — the UI hides them rather
+   than showing invented copy.
    ═══════════════════════════════════════════════════════════════ */
 
 export type CategoryId = 'jewelry' | 'accessories' | 'clothing'
@@ -21,22 +20,22 @@ export interface Category {
   blurb: string
   /** the single saturated accent for this category (vault rule: one gem/screen) */
   gem: Gem
-  /** false = drop not yet cut; category renders a "coming" state, no cards. */
+  /** false = nothing in this category is live in Shopify yet */
   live: boolean
 }
 
 export const categories: Category[] = [
   {
     id: 'jewelry', label: 'Jewelry', gem: 'amethyst', live: true,
-    blurb: 'Hand-cast sterling — winged hearts, the eagle seal, skulls. One stone, set hot.',
+    blurb: 'Hand-cast pendants, pins and the winged heart — the pieces the tribe is known by.',
   },
   {
     id: 'accessories', label: 'Accessories', gem: 'ruby', live: true,
-    blurb: 'The dice, the pipe — solid .925 objects, stamped and gem-set. Pocket weight, not trinkets.',
+    blurb: 'Artifact dice and solid silver objects — stamped, gem-set, pocket weight.',
   },
   {
-    id: 'clothing', label: 'Clothing', gem: 'emerald', live: false,
-    blurb: 'Cut-and-sew, bandanas, stickers. Next off the bench — not yet cast.',
+    id: 'clothing', label: 'Clothing', gem: 'emerald', live: true,
+    blurb: 'Hemp and mulberry silk bandanas, woven to order.',
   },
 ]
 
@@ -48,99 +47,181 @@ export interface Product {
   slug: string
   name: string
   category: CategoryId
-  /** short descriptor under the name */
-  spec: string
   gem: Gem
-  metal: string
-  /** indicative starting price, USD — DEMO */
+  /** real list price, USD — the Shopify variant price */
   priceUSD: number
+  /** Shopify CDN url of the primary shot */
   image: string
-  /** object-position for the card/hero crop (hides phone UI / off-centres) */
+  gallery: string[]
+  /** object-position for the card/hero crop */
   focal: string
-  /** true = bg-removed cutout that composites onto the brushed-void ground (contain, not cover) */
-  cut?: boolean
-  gallery?: string[]
   tag?: string
-  /** ring/variant sizes — only set on pieces where size is load-bearing.
-   *  DEMO ranges until the client confirms what they actually cast. */
+  /** written in Shopify admin; absent until the client fills it in */
+  description?: string
+  /** short descriptor under the name — absent unless Shopify has one */
+  spec?: string
+  /** hallmark spec block on the PDP — absent unless Shopify has one */
+  hallmark?: string[]
   sizes?: string[]
-  popular: boolean
-  isDemo: boolean
-  /** hallmark spec block on the PDP */
-  hallmark: string[]
-  description: string
+  /** gid://shopify/ProductVariant/… — what checkout actually buys */
+  variantId: string
+  productId: string
+  availableForSale: boolean
 }
 
 export const products: Product[] = [
-  /* ─── JEWELRY (amethyst) ─────────────────────────────────────── */
   {
-    id: 'j-heart', slug: 'winged-heart-pendant', name: 'Winged Heart',
-    category: 'jewelry', spec: 'Sterling · amethyst · rolo chain', gem: 'amethyst',
-    metal: '.925 Sterling Silver', priceUSD: 680,
-    image: '/assets/products/winged-heart-01.png', focal: 'center 42%',
+    id: 'tree-of-life-pendant', slug: 'tree-of-life-pendant', name: '24k Gold Tree of Life Pendant',
+    category: 'jewelry', gem: 'amethyst', priceUSD: 1800,
+    tag: '24K Gold',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/tree-of-life-01.png?v=1786380215',
     gallery: [
-      '/assets/products/winged-heart-01.png',
-      '/assets/products/winged-heart-02.png',
-      '/assets/products/winged-heart-03.png',
-      '/assets/products/winged-heart-04.png',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/tree-of-life-01.png?v=1786380215',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/tree-of-life-02.png?v=1786380215',
     ],
-    tag: 'Signature', popular: true, isDemo: true,
-    hallmark: ['.925 STERLING', 'HAND-CAST', 'USA', 'AMETHYST'],
-    description:
-      'A polished sterling heart flanked by full spread wings, crowned with a single bezel-set amethyst. Hung on a hand-finished rolo chain. Cast, filed and set by hand — the piece the tribe is known by.',
+    variantId: 'gid://shopify/ProductVariant/47177114124342',
+    productId: 'gid://shopify/Product/9136282075190',
+    availableForSale: true,
   },
   {
-    id: 'j-eagle', slug: 'ft-eagle-medallion', name: 'FT Eagle Seal',
-    category: 'jewelry', spec: 'Sterling · the house seal', gem: 'amethyst',
-    metal: '.925 Sterling Silver', priceUSD: 1000,
-    image: '/assets/products/ft-eagle.png', focal: 'center 48%',
+    id: 'arrowhead-pendant', slug: 'arrowhead-pendant', name: 'Heavy Solid Silver Arrowhead Pendant',
+    category: 'jewelry', gem: 'amethyst', priceUSD: 500,
+    tag: 'Hand-forged',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/arrowhead-01.png?v=1786380223',
     gallery: [
-      '/assets/products/ft-eagle.png',
-      '/assets/products/bench-eagle.png',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/arrowhead-01.png?v=1786380223',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/arrowhead-02.png?v=1786380223',
     ],
-    tag: 'The Seal', popular: true, isDemo: true,
-    hallmark: ['.925 STERLING', 'HAND-CAST', 'USA', 'MMXXVI'],
-    description:
-      'The Flight Tribe seal in solid sterling — the eagle mid-flight over the globe, F and T on the wings. The mark that stamps every piece, cast as an object you can wear.',
+    variantId: 'gid://shopify/ProductVariant/47177116090422',
+    productId: 'gid://shopify/Product/9136282140726',
+    availableForSale: true,
   },
   {
-    id: 'j-skull', slug: 'skull-ring', name: 'Skull Ring',
-    category: 'jewelry', spec: 'Sterling · carved band', gem: 'amethyst',
-    metal: '.925 Sterling Silver', priceUSD: 540,
-    image: '/assets/products/skull-ring.png', focal: 'center 46%',
-    gallery: ['/assets/products/skull-ring.png'],
-    sizes: ['7', '8', '9', '10', '11', '12'],
-    tag: 'Hand-carved', popular: false, isDemo: true,
-    hallmark: ['.925 STERLING', 'HAND-CARVED', 'USA'],
-    description:
-      'A heavy sterling skull worked into a full band — carved wax, cast solid, hand-finished. Shown on the board because it plays like a piece on the field.',
-  },
-
-  /* ─── ACCESSORIES (ruby) ─────────────────────────────────────── */
-  {
-    id: 'a-dice', slug: 'flight-tribe-dice', name: 'Flight Tribe Dice',
-    category: 'accessories', spec: 'Pair · solid .925 · ruby-set pips', gem: 'ruby',
-    metal: '.925 Sterling Silver', priceUSD: 1200,
-    image: '/assets/products/dice-01-cut.png', focal: 'center center', cut: true,
+    id: 'pilot-pin', slug: 'pilot-pin', name: 'Flight Tribe Pilot Pin',
+    category: 'jewelry', gem: 'amethyst', priceUSD: 500,
+    tag: 'Wings',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pilot-pin-01.png?v=1786380230',
     gallery: [
-      '/assets/products/dice-01-cut.png',
-      '/assets/products/dice-eye-cut.png',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pilot-pin-01.png?v=1786380230',
     ],
-    tag: 'Icon', popular: true, isDemo: true,
-    hallmark: ['.925 STERLING', 'RUBY-SET', 'USA', '2026'],
-    description:
-      'A matched pair of solid sterling dice — every pip a set ruby, faces engraved with the eye sigil, crossed arrows and the FLIGHT · TRIBE stamp, edges struck .925 · USA · 2026. The object the whole language is drawn from.',
+    variantId: 'gid://shopify/ProductVariant/47177116155958',
+    productId: 'gid://shopify/Product/9136282206262',
+    availableForSale: true,
   },
   {
-    id: 'a-pipe', slug: 'sterling-peace-pipe', name: 'Peace Pipe',
-    category: 'accessories', spec: 'Hand-hammered solid sterling', gem: 'ruby',
-    metal: '.925 Sterling Silver', priceUSD: 460,
-    image: '/assets/products/peace-pipe.png', focal: 'center 52%',
-    gallery: ['/assets/products/peace-pipe.png'],
-    tag: 'Hand-hammered', popular: false, isDemo: true,
-    hallmark: ['.925 STERLING', 'HAND-HAMMERED', 'USA'],
-    description:
-      'A pure-silver peace pipe, planished by hand so every hammer mark stays in the metal. Weighty, ceremonial, made to be kept. A secular object — carried, not worshipped.',
+    id: 'winged-heart-pendant', slug: 'winged-heart-pendant', name: 'Winged Heart Pendant',
+    category: 'jewelry', gem: 'amethyst', priceUSD: 2500,
+    tag: 'Signature',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/heart-01.png?v=1786380237',
+    gallery: [
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/heart-01.png?v=1786380237',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/heart-02.png?v=1786380237',
+    ],
+    variantId: 'gid://shopify/ProductVariant/47177116778550',
+    productId: 'gid://shopify/Product/9136282271798',
+    availableForSale: true,
+  },
+  {
+    id: 'liberty-250th-dice', slug: 'liberty-250th-dice', name: 'Flight Tribe 250th Liberty Gemstone Artifact Dice',
+    category: 'accessories', gem: 'ruby', priceUSD: 2500,
+    tag: 'Limited · 250th',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/liberty-dice-01.png?v=1786380245',
+    gallery: [
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/liberty-dice-01.png?v=1786380245',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/liberty-dice-02.png?v=1786380245',
+    ],
+    variantId: 'gid://shopify/ProductVariant/47177116811318',
+    productId: 'gid://shopify/Product/9136282304566',
+    availableForSale: true,
+  },
+  {
+    id: 'ruby-relic-dice', slug: 'ruby-relic-dice', name: 'Flight Tribe Ruby Relic Dice',
+    category: 'accessories', gem: 'ruby', priceUSD: 2000,
+    tag: 'Icon · hero product',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/ruby-dice-01.png?v=1786380252',
+    gallery: [
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/ruby-dice-01.png?v=1786380252',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/ruby-dice-02.png?v=1786380251',
+    ],
+    variantId: 'gid://shopify/ProductVariant/47177116844086',
+    productId: 'gid://shopify/Product/9136282337334',
+    availableForSale: true,
+  },
+  {
+    id: 'iceman-sapphire-dice', slug: 'iceman-sapphire-dice', name: 'IceMan US Mined Montana Blue Sapphire Artifact Dice',
+    category: 'accessories', gem: 'ruby', priceUSD: 6000,
+    tag: 'Rare',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01.png?v=1786380259',
+    gallery: [
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01.png?v=1786380259',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02.png?v=1786380258',
+    ],
+    variantId: 'gid://shopify/ProductVariant/47177116942390',
+    productId: 'gid://shopify/Product/9136282435638',
+    availableForSale: true,
+  },
+  {
+    id: 'artifact-dice-collection', slug: 'artifact-dice-collection', name: 'The Flight Tribe Artifact Dice Collection',
+    category: 'accessories', gem: 'ruby', priceUSD: 9250,
+    tag: 'Collector Set',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01_20371868-1eed-473e-b522-e9c7d50380ba.png?v=1786380267',
+    gallery: [
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01_20371868-1eed-473e-b522-e9c7d50380ba.png?v=1786380267',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02_3d398916-6d7b-4294-92e5-d7d3bef480c5.png?v=1786380267',
+    ],
+    variantId: 'gid://shopify/ProductVariant/47177117007926',
+    productId: 'gid://shopify/Product/9136282501174',
+    availableForSale: true,
+  },
+  {
+    id: 'paperweight-pipe', slug: 'paperweight-pipe', name: 'Solid Silver Paper Weight Pipe',
+    category: 'accessories', gem: 'ruby', priceUSD: 2500,
+    tag: 'Hand-hammered',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pipe-01.png?v=1786380276',
+    gallery: [
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pipe-01.png?v=1786380276',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pipe-02.png?v=1786380276',
+    ],
+    variantId: 'gid://shopify/ProductVariant/47177117106230',
+    productId: 'gid://shopify/Product/9136282566710',
+    availableForSale: true,
+  },
+  {
+    id: 'hemp-bandana', slug: 'hemp-bandana', name: 'Flight Tribe 100% Hemp Bandana',
+    category: 'clothing', gem: 'emerald', priceUSD: 888,
+    tag: 'Bulk order only',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/hemp-01.png?v=1786380284',
+    gallery: [
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/hemp-01.png?v=1786380284',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/hemp-02.png?v=1786380284',
+    ],
+    variantId: 'gid://shopify/ProductVariant/47177117138998',
+    productId: 'gid://shopify/Product/9136282599478',
+    availableForSale: true,
+  },
+  {
+    id: 'silk-bandana', slug: 'silk-bandana', name: 'Flight Tribe 100% Mulberry Silk Bandana',
+    category: 'clothing', gem: 'emerald', priceUSD: 88,
+    tag: 'Bulk order only',
+    focal: 'center center',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/silk-01.jpg?v=1786380291',
+    gallery: [
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/silk-01.jpg?v=1786380291',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/silk-02.png?v=1786380291',
+    ],
+    variantId: 'gid://shopify/ProductVariant/47177117237302',
+    productId: 'gid://shopify/Product/9136282697782',
+    availableForSale: true,
   },
 ]
 
@@ -150,7 +231,8 @@ export const productBySlug = (slug: string): Product | undefined =>
 export const productsByCategory = (id: CategoryId): Product[] =>
   products.filter((p) => p.category === id)
 
-export const popularProducts = (): Product[] => products.filter((p) => p.popular)
+/** The Bench · Current — the first four pieces in Shopify's catalogue order. */
+export const popularProducts = (): Product[] => products.slice(0, 4)
 
 /** the hero object for THE BENCH */
 export const heroProduct = (): Product => products[0]

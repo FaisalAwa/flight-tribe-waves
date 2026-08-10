@@ -4,7 +4,7 @@ import gsap from 'gsap'
 import type { Product } from '@/data/products'
 import { formatPrice } from '@/lib/format'
 import { useCart } from '@/context/CartContext'
-import { EyeSigil, Hallmark, DemoBadge } from './Sigil'
+import { EyeSigil, Hallmark } from './Sigil'
 
 /* Vitrine product card. Experimental frame + raking light, conventional
    mechanics: name, price, full-card tap target, and an add-to-bag that fires
@@ -65,7 +65,8 @@ export function ProductCard({ product, ratio = '4 / 5' }: { product: Product; ra
     e.preventDefault()
     add({
       id: product.id, slug: product.slug, name: product.name, spec: product.spec,
-      image: product.image, priceUSD: product.priceUSD, isDemo: product.isDemo, gem: `var(--gem-${product.gem})`,
+      image: product.image, priceUSD: product.priceUSD, gem: `var(--gem-${product.gem})`,
+      variantId: product.variantId,
     })
     // force-restart the ignite keyframe even on rapid repeat clicks
     setFired(false)
@@ -77,12 +78,12 @@ export function ProductCard({ product, ratio = '4 / 5' }: { product: Product; ra
     <article className="card" data-gem={product.gem}>
       <Link
         ref={frameRef}
-        to={`/product/${product.slug}`} className={`frame${product.cut ? ' frame--cut' : ''}`}
+        to={`/product/${product.slug}`} className="frame"
         style={{ aspectRatio: ratio }}
       >
         {product.tag && <span className="card__tag">{product.tag}</span>}
         <img
-          className={`frame__img${product.cut ? ' frame__img--cut' : ''}`} src={product.image} alt={product.name}
+          className="frame__img" src={product.image} alt={product.name}
           style={{ objectPosition: product.focal }} loading="lazy"
         />
         <span className="frame__gemwash" />
@@ -107,11 +108,10 @@ export function ProductCard({ product, ratio = '4 / 5' }: { product: Product; ra
       <div className="card__meta">
         <div>
           <h3 className="card__name">{product.name}</h3>
-          <p className="card__spec" style={{ marginTop: 6 }}>{product.spec}</p>
+          {product.spec && <p className="card__spec" style={{ marginTop: 6 }}>{product.spec}</p>}
         </div>
         <p className="card__price">
-          {formatPrice(product.priceUSD)}{' '}
-          {product.isDemo && <DemoBadge />}
+          {formatPrice(product.priceUSD)}
         </p>
       </div>
 

@@ -13,7 +13,10 @@ import { popularProducts, productBySlug } from '@/data/products'
 export default function Home() {
   const root = useRef<HTMLDivElement>(null)
   const featured = popularProducts()
-  const dice = productBySlug('flight-tribe-dice') // hero object (may be undefined if catalogue changes)
+  // Hero object — the Ruby Relic Dice, which the product audit marks as the
+  // piece the homepage hero video/CTA links to. Undefined-safe if it's ever
+  // unpublished in Shopify.
+  const dice = productBySlug('ruby-relic-dice')
 
   useLayoutEffect(() => {
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches

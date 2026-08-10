@@ -1,0 +1,285 @@
+{
+  "shop": "flightribe-aphxmxgd.myshopify.com",
+  "apiVersion": "2026-07",
+  "products": [
+    {
+      "slug": "tree-of-life-pendant",
+      "name": "24k Gold Tree of Life Pendant",
+      "category": "jewelry",
+      "categoryLabel": "Jewelry",
+      "tag": "24K Gold",
+      "priceUSD": 1800,
+      "productId": "gid://shopify/Product/9136282075190",
+      "variantId": "gid://shopify/ProductVariant/47177114124342",
+      "images": [
+        {
+          "file": "tree-of-life-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/tree-of-life-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/tree-of-life-01.png?v=1786380215",
+          "width": 2509,
+          "height": 2509
+        },
+        {
+          "file": "tree-of-life-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/tree-of-life-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/tree-of-life-02.png?v=1786380215",
+          "width": 2624,
+          "height": 2624
+        }
+      ]
+    },
+    {
+      "slug": "arrowhead-pendant",
+      "name": "Heavy Solid Silver Arrowhead Pendant",
+      "category": "jewelry",
+      "categoryLabel": "Jewelry",
+      "tag": "Hand-forged",
+      "priceUSD": 500,
+      "productId": "gid://shopify/Product/9136282140726",
+      "variantId": "gid://shopify/ProductVariant/47177116090422",
+      "images": [
+        {
+          "file": "arrowhead-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/arrowhead-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/arrowhead-01.png?v=1786380223",
+          "width": 2624,
+          "height": 2624
+        },
+        {
+          "file": "arrowhead-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/arrowhead-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/arrowhead-02.png?v=1786380223",
+          "width": 2624,
+          "height": 2624
+        }
+      ]
+    },
+    {
+      "slug": "pilot-pin",
+      "name": "Flight Tribe Pilot Pin",
+      "category": "jewelry",
+      "categoryLabel": "Jewelry",
+      "tag": "Wings",
+      "priceUSD": 500,
+      "productId": "gid://shopify/Product/9136282206262",
+      "variantId": "gid://shopify/ProductVariant/47177116155958",
+      "images": [
+        {
+          "file": "pilot-pin-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/pilot-pin-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pilot-pin-01.png?v=1786380230",
+          "width": 1437,
+          "height": 1437
+        }
+      ]
+    },
+    {
+      "slug": "winged-heart-pendant",
+      "name": "Winged Heart Pendant",
+      "category": "jewelry",
+      "categoryLabel": "Jewelry",
+      "tag": "Signature",
+      "priceUSD": 2500,
+      "productId": "gid://shopify/Product/9136282271798",
+      "variantId": "gid://shopify/ProductVariant/47177116778550",
+      "images": [
+        {
+          "file": "heart-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/heart-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/heart-01.png?v=1786380237",
+          "width": 1170,
+          "height": 2532
+        },
+        {
+          "file": "heart-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/heart-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/heart-02.png?v=1786380237",
+          "width": 1170,
+          "height": 2532
+        }
+      ]
+    },
+    {
+      "slug": "liberty-250th-dice",
+      "name": "Flight Tribe 250th Liberty Gemstone Artifact Dice",
+      "category": "accessories",
+      "categoryLabel": "Accessories",
+      "tag": "Limited · 250th",
+      "priceUSD": 2500,
+      "productId": "gid://shopify/Product/9136282304566",
+      "variantId": "gid://shopify/ProductVariant/47177116811318",
+      "images": [
+        {
+          "file": "liberty-dice-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/liberty-dice-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/liberty-dice-01.png?v=1786380245",
+          "width": 2340,
+          "height": 2340
+        },
+        {
+          "file": "liberty-dice-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/liberty-dice-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/liberty-dice-02.png?v=1786380245",
+          "width": 2624,
+          "height": 2624
+        }
+      ]
+    },
+    {
+      "slug": "ruby-relic-dice",
+      "name": "Flight Tribe Ruby Relic Dice",
+      "category": "accessories",
+      "categoryLabel": "Accessories",
+      "tag": "Icon · hero product",
+      "priceUSD": 2000,
+      "productId": "gid://shopify/Product/9136282337334",
+      "variantId": "gid://shopify/ProductVariant/47177116844086",
+      "images": [
+        {
+          "file": "ruby-dice-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/ruby-dice-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/ruby-dice-01.png?v=1786380252",
+          "width": 2624,
+          "height": 2624
+        },
+        {
+          "file": "ruby-dice-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/ruby-dice-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/ruby-dice-02.png?v=1786380251",
+          "width": 2592,
+          "height": 2592
+        }
+      ]
+    },
+    {
+      "slug": "iceman-sapphire-dice",
+      "name": "IceMan US Mined Montana Blue Sapphire Artifact Dice",
+      "category": "accessories",
+      "categoryLabel": "Accessories",
+      "tag": "Rare",
+      "priceUSD": 6000,
+      "productId": "gid://shopify/Product/9136282435638",
+      "variantId": "gid://shopify/ProductVariant/47177116942390",
+      "images": [
+        {
+          "file": "bundle-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/bundle-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01.png?v=1786380259",
+          "width": 2552,
+          "height": 2552
+        },
+        {
+          "file": "bundle-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/bundle-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02.png?v=1786380258",
+          "width": 1685,
+          "height": 1685
+        }
+      ]
+    },
+    {
+      "slug": "artifact-dice-collection",
+      "name": "The Flight Tribe Artifact Dice Collection",
+      "category": "accessories",
+      "categoryLabel": "Accessories",
+      "tag": "Collector Set",
+      "priceUSD": 9250,
+      "productId": "gid://shopify/Product/9136282501174",
+      "variantId": "gid://shopify/ProductVariant/47177117007926",
+      "images": [
+        {
+          "file": "bundle-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/bundle-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01_20371868-1eed-473e-b522-e9c7d50380ba.png?v=1786380267",
+          "width": 2552,
+          "height": 2552
+        },
+        {
+          "file": "bundle-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/bundle-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02_3d398916-6d7b-4294-92e5-d7d3bef480c5.png?v=1786380267",
+          "width": 1685,
+          "height": 1685
+        }
+      ]
+    },
+    {
+      "slug": "paperweight-pipe",
+      "name": "Solid Silver Paper Weight Pipe",
+      "category": "accessories",
+      "categoryLabel": "Accessories",
+      "tag": "Hand-hammered",
+      "priceUSD": 2500,
+      "productId": "gid://shopify/Product/9136282566710",
+      "variantId": "gid://shopify/ProductVariant/47177117106230",
+      "images": [
+        {
+          "file": "pipe-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/pipe-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pipe-01.png?v=1786380276",
+          "width": 2313,
+          "height": 2313
+        },
+        {
+          "file": "pipe-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/pipe-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pipe-02.png?v=1786380276",
+          "width": 2162,
+          "height": 2162
+        }
+      ]
+    },
+    {
+      "slug": "hemp-bandana",
+      "name": "Flight Tribe 100% Hemp Bandana",
+      "category": "clothing",
+      "categoryLabel": "Clothing",
+      "tag": "Bulk order only",
+      "priceUSD": 888,
+      "productId": "gid://shopify/Product/9136282599478",
+      "variantId": "gid://shopify/ProductVariant/47177117138998",
+      "images": [
+        {
+          "file": "hemp-01.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/hemp-01.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/hemp-01.png?v=1786380284",
+          "width": 1170,
+          "height": 2532
+        },
+        {
+          "file": "hemp-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/hemp-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/hemp-02.png?v=1786380284",
+          "width": 1170,
+          "height": 2532
+        }
+      ]
+    },
+    {
+      "slug": "silk-bandana",
+      "name": "Flight Tribe 100% Mulberry Silk Bandana",
+      "category": "clothing",
+      "categoryLabel": "Clothing",
+      "tag": "Bulk order only",
+      "priceUSD": 88,
+      "productId": "gid://shopify/Product/9136282697782",
+      "variantId": "gid://shopify/ProductVariant/47177117237302",
+      "images": [
+        {
+          "file": "silk-01.jpg",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/silk-01.jpg",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/silk-01.jpg?v=1786380291",
+          "width": 3264,
+          "height": 4080
+        },
+        {
+          "file": "silk-02.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/silk-02.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/silk-02.png?v=1786380291",
+          "width": 1170,
+          "height": 2532
+        }
+      ]
+    }
+  ]
+}

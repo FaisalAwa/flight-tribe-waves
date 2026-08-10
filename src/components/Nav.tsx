@@ -2,6 +2,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import gsap from 'gsap'
 import { useCart } from '@/context/CartContext'
+import { productsByCategory } from '@/data/products'
+import type { CategoryId } from '@/data/products'
 import { Globe, EyeSigil, Hallmark } from './Sigil'
 import { currentYearRoman } from '@/lib/year'
 
@@ -16,11 +18,17 @@ import { currentYearRoman } from '@/lib/year'
 
 interface IndexItem { label: string; to: string; thumb: string }
 
+/* Category thumbs come from the live catalogue, so the overlay can never show
+   a piece from the wrong category (Clothing used to be illustrated with the
+   silver pipe). Falls back to a bench shot if a category is empty. */
+const BENCH = '/assets/products/bench-eagle.png'
+const categoryThumb = (id: CategoryId): string => productsByCategory(id)[0]?.image ?? BENCH
+
 const INDEX: IndexItem[] = [
-  { label: 'Jewelry',     to: '/shop/jewelry',     thumb: '/assets/products/winged-heart-01.png' },
-  { label: 'Accessories', to: '/shop/accessories', thumb: '/assets/products/dice-01-cut.png' },
-  { label: 'Clothing',    to: '/shop/clothing',    thumb: '/assets/products/peace-pipe.png' },
-  { label: 'Tribe',       to: '/tribe',            thumb: '/assets/products/bench-eagle.png' },
+  { label: 'Jewelry',     to: '/shop/jewelry',     thumb: categoryThumb('jewelry') },
+  { label: 'Accessories', to: '/shop/accessories', thumb: categoryThumb('accessories') },
+  { label: 'Clothing',    to: '/shop/clothing',    thumb: categoryThumb('clothing') },
+  { label: 'Tribe',       to: '/tribe',            thumb: BENCH },
   { label: 'Contact',     to: '/contact',          thumb: '/assets/products/ft-eagle.png' },
 ]
 

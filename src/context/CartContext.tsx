@@ -14,14 +14,14 @@ export interface CartItem {
   id: string
   slug: string
   name: string
-  spec: string
+  /** short descriptor under the name — absent unless Shopify has one */
+  spec?: string
   image: string
   priceUSD: number
   qty: number
-  isDemo: boolean
   /** the active gem accent for this piece — drives the Ignite stamp colour */
   gem?: string
-  /** Shopify variant id — populated at connect-shopify time. */
+  /** gid://shopify/ProductVariant/… — what Shopify checkout actually buys */
   variantId?: string
 }
 

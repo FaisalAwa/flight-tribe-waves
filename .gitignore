@@ -35,6 +35,11 @@ public/assets/*.gif
 
 .vercel
 
+# secrets — Shopify Admin token must never be committed
+.env
+.env.*
+!.env.example
+
 # agent worktrees, dev artifacts, crash dumps
 .claude/worktrees/
 *.stackdump

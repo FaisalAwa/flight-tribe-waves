@@ -196,7 +196,7 @@ export function DiceLanding({ dice, nextLabel = 'The Bench · Current' }: DiceLa
         {/* hallmark spec stamps — drawn from the real product record (not
             hardcoded copy), stamped in as the dice come to rest. */}
         <div className="dice-landing__specs">
-          {dice.hallmark.map((h) => (
+          {(dice.hallmark ?? []).map((h) => (
             <div className="dice-landing__spec" key={h}>
               <span className="dice-landing__dot" aria-hidden="true" />
               <Hallmark>{h}</Hallmark>
