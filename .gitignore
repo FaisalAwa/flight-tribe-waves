@@ -12,7 +12,7 @@ dist
 dist-ssr
 *.local
 
-# Higgsfield media — large files, never commit
+# Higgsfield media — scratch generations, large files, never commit
 public/assets/*.mp4
 public/assets/*.mov
 public/assets/*.jpg
@@ -21,6 +21,18 @@ public/assets/*.png
 public/assets/*.webp
 public/assets/*.gif
 !public/assets/.gitkeep
+
+# …except the shipped hero/section media. These are referenced directly by
+# HeroReveal / ChromeField / Tribe, so a build without them renders an empty
+# black hero. They used to reach production only because the site was deployed
+# from this machine with the Vercel CLI (which ignores .gitignore); on a
+# GitHub-driven build they 404. ~11 MB total — small enough to commit.
+!public/assets/hero-dice-roll.mp4
+!public/assets/hero-dice-roll.jpg
+!public/assets/hero-atmosphere.mp4
+!public/assets/hero-atmosphere-poster.jpg
+!public/assets/bandana-meadow.mp4
+!public/assets/bandana-meadow-poster.jpg
 
 # Editor directories and files
 .vscode/*
