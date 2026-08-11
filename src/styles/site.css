@@ -152,11 +152,13 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .hero-video { position: relative; min-height: 100svh; overflow: hidden; background: var(--c-pit); display: grid; place-items: center start; isolation: isolate; }
 
 /* full-bleed dice-roll video (see HeroReveal.tsx header for current-state note).
-   Parallax-scaled by the exit scrub (transform only) — same treatment as .dice-stage. */
+   Crop window centred, so the die sits dead centre of the frame rather than
+   right-and-low of it. Parallax-scaled by the exit scrub (transform only) —
+   the zoom is anchored centre too, so the centred framing holds as it scales. */
 .hero-video__media {
   position: absolute; inset: 0; z-index: 0;
-  width: 100%; height: 100%; object-fit: cover; object-position: 56% 58%;
-  transform-origin: center 60%; will-change: transform; background: var(--c-pit);
+  width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%;
+  transform-origin: center center; will-change: transform; background: var(--c-pit);
 }
 /* narrow portrait crops keep the full source height (cover scales off
    height here), so the die — vertically centred like the type — would
