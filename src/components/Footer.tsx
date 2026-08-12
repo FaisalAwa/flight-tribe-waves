@@ -68,6 +68,16 @@ export function Footer() {
           <h2 className="display" style={{ fontSize: 'var(--t-h2)' }}>Flight&nbsp;Tribe</h2>
         </div>
 
+        <style>{`
+          /* column headings sit heavier than the links under them */
+          .footer__colhead { font-weight: 700; color: var(--c-bone); }
+          .footer__mail { color: inherit; text-decoration: none; transition: color 0.2s var(--ease-ui); }
+          .footer__mail:hover, .footer__mail:focus-visible { color: var(--c-gem); }
+          .footer__built { display: flex; justify-content: center; margin-top: var(--s-sm); color: var(--c-muted); }
+          .footer__built a { color: var(--c-bone); font-weight: 700; text-decoration: none; transition: color 0.2s var(--ease-ui); }
+          .footer__built a:hover, .footer__built a:focus-visible { color: var(--c-gem); }
+        `}</style>
+
         <div
           style={{
             display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
@@ -75,37 +85,54 @@ export function Footer() {
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <Hallmark className="eyebrow">The Vault</Hallmark>
+            <Hallmark className="eyebrow footer__colhead">The Vault</Hallmark>
             <Link className="topbar__link" to="/shop/jewelry">Jewelry</Link>
             <Link className="topbar__link" to="/shop/accessories">Accessories</Link>
             <Link className="topbar__link" to="/shop/clothing">Clothing</Link>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <Hallmark className="eyebrow">The Tribe</Hallmark>
+            <Hallmark className="eyebrow footer__colhead">The Tribe</Hallmark>
             <Link className="topbar__link" to="/tribe">The Story</Link>
             <Link className="topbar__link" to="/contact">Contact</Link>
             <Link className="topbar__link" to="/cart">Bag</Link>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <Hallmark className="eyebrow">Send Word <DemoBadge label="TBC" /></Hallmark>
-            <Hallmark as="p">hello@flighttribe.co</Hallmark>
+            <Hallmark className="eyebrow footer__colhead">Send Word</Hallmark>
+            <Hallmark as="p">
+              <a className="footer__mail" href="mailto:Flightxtribe@gmail.com">Flightxtribe@gmail.com</a>
+            </Hallmark>
+            <Hallmark as="p">
+              <a
+                className="footer__mail"
+                href="https://www.instagram.com/Flight__Tribe/"
+                target="_blank" rel="noopener noreferrer"
+              >
+                @Flight__Tribe
+              </a>
+            </Hallmark>
             <div style={{ display: 'flex', alignItems: 'center', gap: 2, marginLeft: -10, marginTop: 2 }}>
               <style>{`
                 .footer__social { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; color: var(--c-chrome); transition: color 0.2s var(--ease-ui); }
                 .footer__social:hover, .footer__social:focus-visible { color: var(--c-gem); }
               `}</style>
               <a
-                href="#" className="footer__social"
-                aria-label="Flight Tribe on Instagram — handle pending confirmation"
+                href="https://www.instagram.com/Flight__Tribe/"
+                target="_blank" rel="noopener noreferrer"
+                className="footer__social"
+                aria-label="Flight Tribe on Instagram — @Flight__Tribe"
               >
                 <InstagramLogo size={20} weight="light" />
               </a>
-              <a
-                href="#" className="footer__social"
+              {/* TikTok: the client has given an Instagram handle but not a
+                  TikTok one, so this stays an un-clickable marker rather than a
+                  link to nowhere. Swap it for an <a> once the handle lands. */}
+              <span
+                className="footer__social"
+                title="TikTok handle pending"
                 aria-label="Flight Tribe on TikTok — handle pending confirmation"
               >
                 <TiktokLogo size={20} weight="light" />
-              </a>
+              </span>
               <DemoBadge label="TBC" />
             </div>
             <Hallmark as="p" >Made on Earth · USA</Hallmark>
@@ -145,6 +172,14 @@ export function Footer() {
           <Hallmark>© {year} Flight Tribe · .925 · {currentYearRoman()}</Hallmark>
           <EyeSigil size={22} />
           <Hallmark>All silver hand-cast in the USA — no two struck alike</Hallmark>
+        </div>
+
+        {/* build credit */}
+        <div className="footer__built">
+          <Hallmark>
+            Built by{' '}
+            <a href="https://wavesmvmnt.com" target="_blank" rel="noopener noreferrer">Waves</a>
+          </Hallmark>
         </div>
       </div>
     </footer>
