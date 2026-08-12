@@ -107,7 +107,9 @@ export function ProductCard({ product, ratio = '4 / 5' }: { product: Product; ra
 
       <div className="card__meta">
         <div>
-          <h3 className="card__name">{product.name}</h3>
+          <h3 className="card__name">
+            <Link to={`/product/${product.slug}`}>{product.name}</Link>
+          </h3>
           {product.spec && <p className="card__spec" style={{ marginTop: 6 }}>{product.spec}</p>}
         </div>
         <p className="card__price">

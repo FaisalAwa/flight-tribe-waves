@@ -268,7 +268,6 @@ export const products: Product[] = [
   {
     id: 'hemp-bandana', slug: 'hemp-bandana', name: 'Flight Tribe 100% Hemp Bandana',
     category: 'clothing', gem: 'emerald', priceUSD: 888,
-    tag: 'Bulk order only',
     focal: 'center center',
     image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/hemp-01.png?v=1786380284',
     gallery: [
@@ -285,7 +284,6 @@ export const products: Product[] = [
   {
     id: 'silk-bandana', slug: 'silk-bandana', name: 'Flight Tribe 100% Mulberry Silk Bandana',
     category: 'clothing', gem: 'emerald', priceUSD: 88,
-    tag: 'Bulk order only',
     focal: 'center center',
     image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/silk-01.jpg?v=1786380291',
     gallery: [

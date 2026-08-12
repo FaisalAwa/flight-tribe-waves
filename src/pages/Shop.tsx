@@ -112,7 +112,7 @@ export default function Shop() {
                 rather than routing to the (info-only) contact page. Swap for a
                 real newsletter backend once one exists (FT-P07). */}
             <MagneticBtn
-              href={`mailto:hello@flighttribe.co?subject=${encodeURIComponent(`Waitlist — ${cat.label}`)}&body=${encodeURIComponent(`Add me to the ${cat.label.toLowerCase()} drop list. Let me know the moment it's cast.`)}`}
+              href={`mailto:Flightxtribe@gmail.com?subject=${encodeURIComponent(`Waitlist — ${cat.label}`)}&body=${encodeURIComponent(`Add me to the ${cat.label.toLowerCase()} drop list. Let me know the moment it's cast.`)}`}
               className="btn btn--gem"
             >
               Get word when it's cast

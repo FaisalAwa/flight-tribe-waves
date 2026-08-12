@@ -1,12 +1,11 @@
 import { Link } from 'react-router-dom'
-import { InstagramLogo, TiktokLogo } from '@phosphor-icons/react'
-import { EyeSigil, Hallmark, DemoBadge } from './Sigil'
+import { InstagramLogo } from '@phosphor-icons/react'
+import { EyeSigil, Hallmark } from './Sigil'
 import { currentYear, currentYearRoman } from '@/lib/year'
 
-/* Footer — eye mark, hallmark language, honest contact placeholders.
+/* Footer — eye mark, hallmark language, live contact details.
    The old globe seal was dropped (client rejected the globe motif) for a
-   ruby-ember glow + a giant ghosted dice motif bleeding off the edge.
-   FT-P07 BLOCKER: real address / phone / email / socials pending from client. */
+   ruby-ember glow + a giant ghosted dice motif bleeding off the edge. */
 export function Footer() {
   const year = currentYear()
   return (
@@ -123,17 +122,6 @@ export function Footer() {
               >
                 <InstagramLogo size={20} weight="light" />
               </a>
-              {/* TikTok: the client has given an Instagram handle but not a
-                  TikTok one, so this stays an un-clickable marker rather than a
-                  link to nowhere. Swap it for an <a> once the handle lands. */}
-              <span
-                className="footer__social"
-                title="TikTok handle pending"
-                aria-label="Flight Tribe on TikTok — handle pending confirmation"
-              >
-                <TiktokLogo size={20} weight="light" />
-              </span>
-              <DemoBadge label="TBC" />
             </div>
             <Hallmark as="p" >Made on Earth · USA</Hallmark>
           </div>

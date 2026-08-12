@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { Minus, Plus, Trash } from '@phosphor-icons/react'
-import { Hallmark, EyeSigil, Globe, DemoBadge, MagneticBtn } from '@/components'
+import { Hallmark, EyeSigil, Globe, MagneticBtn } from '@/components'
 import { useCart } from '@/context/CartContext'
 import { formatPrice } from '@/lib/format'
 import { currentYearRoman } from '@/lib/year'
@@ -123,7 +123,7 @@ export default function Cart() {
                 actually works. Seam untouched (checkout()/SHOPIFY_ENABLED). */}
             {shopifyEnabled ? (
               <>
-                <p className="card__spec" style={{ marginTop: 10 }}>Shipping + tax at checkout · <DemoBadge label="EST" /></p>
+                <p className="card__spec" style={{ marginTop: 10 }}>Shipping + tax calculated at checkout</p>
                 <button className="btn btn--gem btn--block" style={{ marginTop: 22 }} onClick={onCheckout} disabled={busy}>
                   {busy ? 'Opening…' : 'Checkout'}
                 </button>
@@ -134,7 +134,7 @@ export default function Cart() {
                 <a className="btn btn--gem btn--block" style={{ marginTop: 22 }} href={`https://wa.me/?text=${reserveText}`} target="_blank" rel="noopener noreferrer">
                   Reserve by DM →
                 </a>
-                <a className="btn btn--block" style={{ marginTop: 12 }} href={`mailto:hello@flighttribe.co?subject=${reserveSubject}&body=${reserveText}`}>
+                <a className="btn btn--block" style={{ marginTop: 12 }} href={`mailto:Flightxtribe@gmail.com?subject=${reserveSubject}&body=${reserveText}`}>
                   Reserve by email →
                 </a>
                 <p className="body" style={{ color: 'var(--c-muted)', fontSize: 13, margin: '14px 0 0', lineHeight: 1.6 }}>

@@ -4,7 +4,7 @@ export { Nav } from './Nav'
 export { Footer } from './Footer'
 export { Loader } from './Loader'
 export { ProductCard } from './ProductCard'
-export { Globe, EyeSigil, Hallmark, DemoBadge } from './Sigil'
+export { Globe, EyeSigil, Hallmark } from './Sigil'
 
 // Boilerplate primitives (kept for reuse)
 export { SplitText } from './SplitText'

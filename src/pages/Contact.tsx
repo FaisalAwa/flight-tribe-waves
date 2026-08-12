@@ -1,8 +1,6 @@
-import { Hallmark, EyeSigil, DemoBadge, GridField } from '@/components'
+import { Hallmark, EyeSigil, GridField } from '@/components'
 import { currentYearRoman } from '@/lib/year'
 
-/* CONTACT — FT-P07 BLOCKER: real address / phone / email / socials NOT in the
-   brief. Every field below is a placeholder and marked; confirm before launch. */
 export default function Contact() {
   return (
     <div data-gem="topaz" style={{ position: 'relative', paddingTop: 'calc(60px + var(--s-lg))', minHeight: '100svh', color: 'var(--c-bone)' }}>
@@ -14,19 +12,29 @@ export default function Contact() {
           <p className="body" style={{ color: 'var(--c-muted)', maxWidth: 460 }}>
             Custom commissions, reservations, and stockist enquiries. We answer from the bench, not a call center.
           </p>
-          <p style={{ marginTop: 20 }}><Hallmark className="eyebrow gem">Details pending client <DemoBadge label="TBC" /></Hallmark></p>
         </header>
 
         <div style={{ gridColumn: '7 / span 6', display: 'flex', flexDirection: 'column', gap: 'var(--s-sm)' }}>
           {[
-            ['Email', 'hello@flighttribe.co'],
-            ['Instagram', '@flighttribe'],
+            ['Email', 'Flightxtribe@gmail.com', 'mailto:Flightxtribe@gmail.com'],
+            ['Instagram', '@Flight__Tribe', 'https://www.instagram.com/Flight__Tribe/'],
             ['Studio', 'By appointment · USA'],
             ['Reserve', 'DM any piece from the bag'],
-          ].map(([k, v]) => (
+          ].map(([k, v, href]) => (
             <div key={k} className="contact-row" style={{ borderBottom: '1px solid var(--c-line)', paddingBottom: 16 }}>
-              <Hallmark className="eyebrow">{k} <DemoBadge label="TBC" /></Hallmark>
-              <p className="display" style={{ fontSize: 'var(--t-h3)', marginTop: 8 }}>{v}</p>
+              <Hallmark className="eyebrow">{k}</Hallmark>
+              {href ? (
+                <a
+                  className="display" href={href}
+                  target={href.startsWith('http') ? '_blank' : undefined}
+                  rel={href.startsWith('http') ? 'noopener noreferrer' : undefined}
+                  style={{ fontSize: 'var(--t-h3)', marginTop: 8, display: 'block', color: 'inherit', textDecoration: 'none' }}
+                >
+                  {v}
+                </a>
+              ) : (
+                <p className="display" style={{ fontSize: 'var(--t-h3)', marginTop: 8 }}>{v}</p>
+              )}
             </div>
           ))}
           <Hallmark as="p" >.925 · Made on Earth · {currentYearRoman()}</Hallmark>

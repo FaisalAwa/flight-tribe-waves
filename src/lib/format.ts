@@ -1,4 +1,4 @@
-/* Small formatting helpers. Prices are DEMO / indicative (see PLACEHOLDERS FT-P02).
+/* Small formatting helpers. Prices are the client's real Shopify list prices.
    Flight Tribe is USA-made (.925 · USA hallmark) → USD. */
 
 /** $1,000 — USD, no trailing .00 for whole amounts. */

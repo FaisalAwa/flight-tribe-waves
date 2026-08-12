@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { Hallmark, EyeSigil, Globe, DemoBadge, MagneticBtn, ChromeField } from '@/components'
+import { Hallmark, EyeSigil, Globe, MagneticBtn, ChromeField } from '@/components'
 import { currentYearRoman } from '@/lib/year'
 
 /* ═══════════════════════════════════════════════════════════════
@@ -8,7 +8,7 @@ import { currentYearRoman } from '@/lib/year'
    Broken 12-col grid, left-locked type, right-edge image bleeds, vertical
    gutter captions. NO centered symmetry, NO dividers. One gem (amethyst) held
    back for 5 beats, released once. Earth-worship = respect for MATERIAL, stated
-   secularly — no religious iconography/copy (client hard rule). Copy DRAFT·DEMO.
+   secularly — no religious iconography/copy (client hard rule).
    ═══════════════════════════════════════════════════════════════ */
 export default function Tribe() {
   const root = useRef<HTMLDivElement>(null)
@@ -69,7 +69,7 @@ export default function Tribe() {
         />
         <div style={{ position: 'absolute', top: 'calc(60px + var(--s-sm))', left: 'var(--gutter)', display: 'flex', alignItems: 'center', gap: 12, color: 'var(--c-chrome)' }}>
           <Globe size={34} />
-          <Hallmark className="eyebrow">The Tribe — Field Notes · <DemoBadge label="DRAFT" /></Hallmark>
+          <Hallmark className="eyebrow">The Tribe — Field Notes</Hallmark>
         </div>
         <h1 className="display" style={{ position: 'relative', zIndex: 2, fontSize: 'clamp(72px, 20vw, 320px)', lineHeight: 0.86, letterSpacing: '-0.02em', marginLeft: 'calc(var(--gutter) - 0.06em)' }}>
           Flight<br />Tribe
@@ -177,7 +177,7 @@ export default function Tribe() {
         />
         <span style={{ position: 'absolute', inset: 0, background: 'linear-gradient(0deg, var(--c-pit) 8%, transparent 60%)' }} />
         <div className="wrap" style={{ position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', paddingBottom: 'var(--s-md)' }}>
-          <Hallmark className="eyebrow">06 — Made on earth · <DemoBadge label="DEMO" /></Hallmark>
+          <Hallmark className="eyebrow">06 — Made on earth</Hallmark>
           <h2 className="display" style={{ fontSize: 'clamp(40px,7vw,120px)', lineHeight: 0.92, marginTop: 10 }}>Hand-drawn,<br />hand-made.</h2>
         </div>
       </section>
