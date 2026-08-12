@@ -59,14 +59,10 @@ export default function Tribe() {
     <div ref={root} data-gem="amethyst" style={{ color: 'var(--c-bone)', overflowX: 'clip' }}>
 
       {/* ── BEAT 1 · COLD OPEN ─────────────────────────────────── */}
-      <section style={{ position: 'relative', minHeight: '92svh', overflow: 'hidden', background: 'var(--c-pit)', display: 'flex', alignItems: 'center' }}>
+      <section style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', background: 'var(--c-pit)', display: 'flex', alignItems: 'center' }}>
         {/* same ambient liquid-chrome backdrop as the Home hero — the addendum
             calls for this behind Hero AND Tribe/About specifically. */}
         <ChromeField />
-        <img
-          src="/assets/products/ft-eagle.png" alt="" aria-hidden
-          style={{ position: 'absolute', right: '-6vw', top: '-10%', width: 'min(58vw, 720px)', opacity: 0.1, filter: 'grayscale(1) contrast(1.1)', pointerEvents: 'none', mixBlendMode: 'screen' }}
-        />
         <div style={{ position: 'absolute', top: 'calc(60px + var(--s-sm))', left: 'var(--gutter)', display: 'flex', alignItems: 'center', gap: 12, color: 'var(--c-chrome)' }}>
           <Globe size={34} />
           <Hallmark className="eyebrow">The Tribe — Field Notes</Hallmark>

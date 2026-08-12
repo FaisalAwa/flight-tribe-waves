@@ -70,6 +70,8 @@ export function Footer() {
         <style>{`
           /* column headings sit heavier than the links under them */
           .footer__colhead { font-weight: 700; color: var(--c-bone); }
+          /* The Vault / The Story — called out bolder + bigger than the rest of the footer links */
+          .footer__label--big { font-weight: 800; font-size: 1.3em; }
           .footer__mail { color: inherit; text-decoration: none; transition: color 0.2s var(--ease-ui); }
           .footer__mail:hover, .footer__mail:focus-visible { color: var(--c-gem); }
           .footer__built { display: flex; justify-content: center; margin-top: var(--s-sm); color: var(--c-muted); }
@@ -84,14 +86,14 @@ export function Footer() {
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            <Hallmark className="eyebrow footer__colhead">The Vault</Hallmark>
+            <Hallmark className="eyebrow footer__colhead footer__label--big">The Vault</Hallmark>
             <Link className="topbar__link" to="/shop/jewelry">Jewelry</Link>
             <Link className="topbar__link" to="/shop/accessories">Accessories</Link>
             <Link className="topbar__link" to="/shop/clothing">Clothing</Link>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <Hallmark className="eyebrow footer__colhead">The Tribe</Hallmark>
-            <Link className="topbar__link" to="/tribe">The Story</Link>
+            <Link className="topbar__link footer__label--big" to="/tribe">The Story</Link>
             <Link className="topbar__link" to="/contact">Contact</Link>
             <Link className="topbar__link" to="/cart">Bag</Link>
           </div>

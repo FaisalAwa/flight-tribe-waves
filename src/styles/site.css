@@ -160,14 +160,6 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%;
   transform-origin: center center; will-change: transform; background: var(--c-pit);
 }
-/* narrow portrait crops keep the full source height (cover scales off
-   height here), so the die — vertically centred like the type — would
-   otherwise sit directly behind the left-locked text. Push the crop
-   window right so the die reads as a right-anchored accent bleeding off
-   the edge, void behind the type, same as the desktop composition. */
-@media (max-width: 700px) {
-  .hero-video__media { object-position: 92% 58%; }
-}
 
 /* full-bleed dice stage; framed slightly right of centre so the cube sits
    clear of the left-locked type. Parallax-scaled by the exit scrub (transform only). */
