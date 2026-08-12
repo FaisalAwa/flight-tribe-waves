@@ -331,6 +331,14 @@ export default function Product() {
                 <span className="pdp-fulfill__val">Soft cloth only. Chlorine and household chemicals are the enemy; keep them apart.</span>
               </div>
             )}
+            {/* the measured size, straight from Shopify — omitted entirely
+                for pieces whose dimensions the client hasn't recorded */}
+            {product.dimensions && (
+              <div className="pdp-fulfill__row">
+                <Hallmark className="pdp-fulfill__label">Size</Hallmark>
+                <span className="pdp-fulfill__val">{product.dimensions}</span>
+              </div>
+            )}
             <div className="pdp-fulfill__row">
               <Hallmark className="pdp-fulfill__label">Fit</Hallmark>
               <span className="pdp-fulfill__val">Each piece is made to order — message us with any sizing or fit questions before you buy.</span>
@@ -346,9 +354,17 @@ export default function Product() {
       {product.description && (
         <div className="wrap pdp__reveal" style={{ marginTop: 'var(--s-md)' }}>
           <Hallmark className="eyebrow">The Piece</Hallmark>
-          <p className="body" style={{ color: 'var(--c-muted)', marginTop: 14, lineHeight: 1.7, maxWidth: '62ch' }}>
-            {product.description}
-          </p>
+          {/* the copy is written in paragraphs in Shopify — keep them, rather
+              than collapsing the whole description into one block of text */}
+          {product.description.split('\n\n').map((para, i) => (
+            <p
+              key={i}
+              className="body"
+              style={{ color: 'var(--c-muted)', marginTop: 14, lineHeight: 1.7, maxWidth: '62ch' }}
+            >
+              {para}
+            </p>
+          ))}
         </div>
       )}
 

@@ -5,10 +5,11 @@
      rebuild: node scripts/shopify/pull.mjs
 
    Every value below is read straight out of Shopify, which was itself loaded
-   from products/Flight-Tribe-Product-Image-Audit … .csv. Prices are the real
-   list prices; images are the Shopify CDN originals. Fields Shopify has no
-   value for (description, spec) are simply absent — the UI hides them rather
-   than showing invented copy.
+   from products/Flight_Tribe_Master_Product_Sheet - Master Catalog.csv.
+   Prices are the real list prices; the copy is the client's own product
+   description; images are the Shopify CDN originals. Fields Shopify has no
+   value for are simply absent — the UI hides them rather than showing
+   invented copy.
    ═══════════════════════════════════════════════════════════════ */
 
 export type CategoryId = 'jewelry' | 'accessories' | 'clothing'
@@ -56,10 +57,12 @@ export interface Product {
   /** object-position for the card/hero crop */
   focal: string
   tag?: string
-  /** written in Shopify admin; absent until the client fills it in */
+  /** the client's product copy, straight from Shopify; blank line = paragraph */
   description?: string
-  /** short descriptor under the name — absent unless Shopify has one */
+  /** short descriptor under the name — flight_tribe.material in Shopify */
   spec?: string
+  /** measured size — flight_tribe.dimensions in Shopify */
+  dimensions?: string
   /** hallmark spec block on the PDP — absent unless Shopify has one */
   hallmark?: string[]
   sizes?: string[]
@@ -80,6 +83,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/tree-of-life-01.png?v=1786380215',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/tree-of-life-02.png?v=1786380215',
     ],
+    dimensions: '23/32 inch H 22/32 W',
+    description: 'Crafted from solid 24k gold, the Flight Tribe Tree of Life Pendant is inspired by one of humanity\'s oldest and most enduring symbols. Across civilizations, the Tree of Life has been revered as the bridge between earth and sky, the seen and the unseen, the roots of the past and the paths yet to be traveled. Precision crafted and polished to a radiant finish, each pendant is a timeless artifact created for those drawn to mystery, legacy, and the pursuit of something greater.',
     variantId: 'gid://shopify/ProductVariant/47177114124342',
     productId: 'gid://shopify/Product/9136282075190',
     availableForSale: true,
@@ -94,6 +99,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/arrowhead-01.png?v=1786380223',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/arrowhead-02.png?v=1786380223',
     ],
+    dimensions: 'H 3 31/32 inch  L 1 1/8 inch    W 1/8 inch',
+    description: 'Crafted from solid .925 sterling silver, the Flight Tribe Heavy Arrowhead Pendant is forged as a symbol of instinct, direction, and the courage to move forward. Since ancient times, the arrowhead has represented the hunter, the protector, and the traveler those who trusted their path when none existed. Precision crafted with a substantial weight and mirror-polished finish, each pendant is a timeless artifact for those who carve their own course and never look back.',
     variantId: 'gid://shopify/ProductVariant/47177116090422',
     productId: 'gid://shopify/Product/9136282140726',
     availableForSale: true,
@@ -107,6 +114,7 @@ export const products: Product[] = [
     gallery: [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pilot-pin-01.png?v=1786380230',
     ],
+    description: 'Crafted from solid .925 sterling silver, the Flight Tribe Eagle Pilot Pin is inspired by the eagle an enduring guardian of the skies and a messenger between earth and the heavens in many cultural traditions. Worn as a symbol of vision, freedom, and fearless ascent, it honors those who trust their instincts and follow the call beyond the horizon. Precision crafted and mirror polished, each pin is a modern talisman for those born to fly their own path.',
     variantId: 'gid://shopify/ProductVariant/47177116155958',
     productId: 'gid://shopify/Product/9136282206262',
     availableForSale: true,
@@ -121,6 +129,7 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/heart-01.png?v=1786380237',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/heart-02.png?v=1786380237',
     ],
+    description: 'Crafted from solid .925 sterling silver, the Flight Tribe Winged Heart Pendant features a brilliant center gemstone embraced by soaring wings. A symbol of love in motion, it represents hearts that refuse to be grounded love that crosses oceans, survives distance, and rises above every obstacle. Precision-crafted and mirror polished, each pendant is a modern talisman for kindred spirits, fearless hearts, and those who believe the greatest journey is the one shared with another. Available with premium lab-grown or natural gemstones upon request.',
     variantId: 'gid://shopify/ProductVariant/47177116778550',
     productId: 'gid://shopify/Product/9136282271798',
     availableForSale: true,
@@ -135,6 +144,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/liberty-dice-01.png?v=1786380245',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/liberty-dice-02.png?v=1786380245',
     ],
+    dimensions: '7/16 inch HxW',
+    description: 'Crafted from solid .925 sterling silver, the Flight Tribe Liberty 250™ Artifact Dice feature hand-set with lab red rubies, lab white diamonds, and lab blue sapphires to honor the colors of the American flag and celebrate 250 years of American independence. Precision crafted and mirror polished, each collectible is a timeless symbol of freedom, craftsmanship, and adventure. Available with premium lab grown gemstones or natural gemstones upon request.',
     variantId: 'gid://shopify/ProductVariant/47177116811318',
     productId: 'gid://shopify/Product/9136282304566',
     availableForSale: true,
@@ -149,6 +160,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/ruby-dice-01.png?v=1786380252',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/ruby-dice-02.png?v=1786380251',
     ],
+    dimensions: '7/16 inch HxW',
+    description: 'Crafted from solid .925 sterling silver, the Flight Tribe Red Ruby Relic Dice Collection is hand-set with vibrant lab grown red rubies, long revered as gemstones of passion, courage, vitality, and protection. Throughout history, rubies have been treasured by kings, warriors, and travelers as symbols of strength and fearless ambition. Precision crafted and mirror polished, each collectible is a timeless statement of luxury, craftsmanship, and individuality. Available with premium lab grown rubies as standard, or natural rubies upon request.',
     variantId: 'gid://shopify/ProductVariant/47177116844086',
     productId: 'gid://shopify/Product/9136282337334',
     availableForSale: true,
@@ -163,6 +176,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01.png?v=1786380259',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02.png?v=1786380258',
     ],
+    dimensions: '7/16 inch HxW',
+    description: 'Crafted from solid .925 sterling silver, the Flight Tribe IceMan U.S. Mined Montana Blue Sapphire Artifact Dice Collection is hand-set with authentic Montana blue sapphires, responsibly sourced from the rugged landscapes of Big Sky Country. Forged beneath endless skies and shaped by the untamed American West, these rare sapphires embody clarity, resilience, freedom, and the courage to forge your own path. Their naturally shifting shades of blue reflect the mountain lakes and open skies that inspired generations of explorers and aviators. Precision crafted and mirror polished, each collectible is a timeless expression of luxury, heritage, and the Flight Tribe spirit of adventure.',
     variantId: 'gid://shopify/ProductVariant/47177116942390',
     productId: 'gid://shopify/Product/9136282435638',
     availableForSale: true,
@@ -177,6 +192,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01_20371868-1eed-473e-b522-e9c7d50380ba.png?v=1786380267',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02_3d398916-6d7b-4294-92e5-d7d3bef480c5.png?v=1786380267',
     ],
+    dimensions: '7/16 inch HxW',
+    description: 'The Flight Tribe Artifact Dice Collection\n\nThe Flight Tribe Artifact Dice Collection brings together three signature relics, each forged from solid .925 sterling silver and inspired by a different path of the journey. From the patriotic spirit of the Liberty 250™ Gemstone Artifact Dice, to the legendary power of the Ruby Relic Dice, and the untamed frontier captured in the IceMan U.S. Mined Montana Blue Sapphire Artifact Dice, every piece is crafted as a modern heirloom.\n\nAcross cultures, dice have symbolized fate, destiny, and the unknown reminders that every journey begins with a single choice. Hand-finished and created in limited numbers, each Artifact Die is more than a collectible; it is a talisman for those who trust instinct, embrace adventure, and forge their own path.',
     variantId: 'gid://shopify/ProductVariant/47177117007926',
     productId: 'gid://shopify/Product/9136282501174',
     availableForSale: true,
@@ -191,6 +208,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pipe-01.png?v=1786380276',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/pipe-02.png?v=1786380276',
     ],
+    dimensions: 'H 1 6/32 inch L 3 1/2 inch W 1/2 inch',
+    description: 'Crafted from solid .925 sterling silver, the Flight Tribe Heavy Paperweight Pipe is inspired by ancient ceremonies where smoke carried prayers, intentions, and stories into the unseen. Precision machined with a substantial weight and mirror-polished finish, each piece is a modern relic created for those who walk their own path and honor the spirit of the journey.',
     variantId: 'gid://shopify/ProductVariant/47177117106230',
     productId: 'gid://shopify/Product/9136282566710',
     availableForSale: true,
@@ -205,6 +224,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/hemp-01.png?v=1786380284',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/hemp-02.png?v=1786380284',
     ],
+    dimensions: '22 inches × 22 inches',
+    description: 'Constructed from 100% premium Hemp fabric in Qingdao, China, at a GOTS-certified facility, delivering a clean, sustainable finish with a distinctly luxurious feel.',
     variantId: 'gid://shopify/ProductVariant/47177117138998',
     productId: 'gid://shopify/Product/9136282599478',
     availableForSale: true,
@@ -219,6 +240,8 @@ export const products: Product[] = [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/silk-01.jpg?v=1786380291',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/silk-02.png?v=1786380291',
     ],
+    dimensions: '22 inches × 22 inches',
+    description: 'Crafted from 100% premium Mulberry silk satin, expertly woven in China, this piece offers an exceptionally smooth feel, natural breathability, and a luminous finish. Renowned as the finest silk in the world, Mulberry silk is prized for its remarkable softness, durability, and timeless elegance, delivering luxury that feels as extraordinary as it looks.',
     variantId: 'gid://shopify/ProductVariant/47177117237302',
     productId: 'gid://shopify/Product/9136282697782',
     availableForSale: true,
