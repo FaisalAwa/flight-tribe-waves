@@ -18,6 +18,16 @@
       "descriptionChars": 477,
       "productId": "gid://shopify/Product/9136282075190",
       "variantId": "gid://shopify/ProductVariant/47177114124342",
+      "optionName": null,
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177114124342",
+          "label": "Default Title",
+          "priceUSD": 1800,
+          "sku": "FT P  24K TOL 004"
+        }
+      ],
+      "unpricedKarats": [],
       "images": [
         {
           "file": "tree-of-life-01.png",
@@ -51,6 +61,34 @@
       "descriptionChars": 469,
       "productId": "gid://shopify/Product/9136282140726",
       "variantId": "gid://shopify/ProductVariant/47177116090422",
+      "optionName": "Material",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177116090422",
+          "label": ".925 Silver",
+          "priceUSD": 500,
+          "sku": "FT P  .925 AH 005"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195848769590",
+          "label": "18k Gold",
+          "priceUSD": 11111,
+          "sku": "FT P  .925 AH 005 18K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195848802358",
+          "label": "22k Gold",
+          "priceUSD": 14300,
+          "sku": "FT P  .925 AH 005 22K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195848835126",
+          "label": "24k Gold",
+          "priceUSD": 15000,
+          "sku": "FT P  .925 AH 005 24K"
+        }
+      ],
+      "unpricedKarats": [],
       "images": [
         {
           "file": "arrowhead-01.png",
@@ -84,6 +122,18 @@
       "descriptionChars": 454,
       "productId": "gid://shopify/Product/9136282206262",
       "variantId": "gid://shopify/ProductVariant/47177116155958",
+      "optionName": null,
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177116155958",
+          "label": "Default Title",
+          "priceUSD": 500,
+          "sku": "FT Pin .925 PP 007"
+        }
+      ],
+      "unpricedKarats": [
+        24
+      ],
       "images": [
         {
           "file": "pilot-pin-01.png",
@@ -110,6 +160,20 @@
       "descriptionChars": 549,
       "productId": "gid://shopify/Product/9136282271798",
       "variantId": "gid://shopify/ProductVariant/47177116778550",
+      "optionName": null,
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177116778550",
+          "label": "Default Title",
+          "priceUSD": 2500,
+          "sku": "FT P .925 HeartP 009"
+        }
+      ],
+      "unpricedKarats": [
+        18,
+        22,
+        24
+      ],
       "images": [
         {
           "file": "heart-01.png",
@@ -143,6 +207,34 @@
       "descriptionChars": 453,
       "productId": "gid://shopify/Product/9136282304566",
       "variantId": "gid://shopify/ProductVariant/47177116811318",
+      "optionName": "Material",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177116811318",
+          "label": ".925 Silver and gemstones",
+          "priceUSD": 2500,
+          "sku": "FT D .925 L250th GD 001"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849162806",
+          "label": "18k Gold",
+          "priceUSD": 10000,
+          "sku": "FT D .925 L250th GD 001 18K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849195574",
+          "label": "22k Gold",
+          "priceUSD": 12000,
+          "sku": "FT D .925 L250th GD 001 22K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849228342",
+          "label": "24k Gold",
+          "priceUSD": 14000,
+          "sku": "FT D .925 L250th GD 001 24K"
+        }
+      ],
+      "unpricedKarats": [],
       "images": [
         {
           "file": "liberty-dice-01.png",
@@ -176,6 +268,34 @@
       "descriptionChars": 545,
       "productId": "gid://shopify/Product/9136282337334",
       "variantId": "gid://shopify/ProductVariant/47177116844086",
+      "optionName": "Material",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177116844086",
+          "label": ".925 Silver and gemstones",
+          "priceUSD": 2000,
+          "sku": "FT D  .925 RRD 002"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849392182",
+          "label": "18k Gold",
+          "priceUSD": 10000,
+          "sku": "FT D  .925 RRD 002 18K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849424950",
+          "label": "22k Gold",
+          "priceUSD": 12000,
+          "sku": "FT D  .925 RRD 002 22K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849457718",
+          "label": "24k Gold",
+          "priceUSD": 14000,
+          "sku": "FT D  .925 RRD 002 24K"
+        }
+      ],
+      "unpricedKarats": [],
       "images": [
         {
           "file": "ruby-dice-01.png",
@@ -209,6 +329,34 @@
       "descriptionChars": 687,
       "productId": "gid://shopify/Product/9136282435638",
       "variantId": "gid://shopify/ProductVariant/47177116942390",
+      "optionName": "Material",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177116942390",
+          "label": ".925 Silver and gemstones",
+          "priceUSD": 6000,
+          "sku": "FT D .925 U.S M MBSD 003"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849490486",
+          "label": "18k Gold",
+          "priceUSD": 10000,
+          "sku": "FT D .925 U.S M MBSD 003 18K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849523254",
+          "label": "22k Gold",
+          "priceUSD": 12000,
+          "sku": "FT D .925 U.S M MBSD 003 22K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849556022",
+          "label": "24k Gold",
+          "priceUSD": 14000,
+          "sku": "FT D .925 U.S M MBSD 003 24K"
+        }
+      ],
+      "unpricedKarats": [],
       "images": [
         {
           "file": "bundle-01.png",
@@ -242,6 +390,16 @@
       "descriptionChars": 785,
       "productId": "gid://shopify/Product/9136282501174",
       "variantId": "gid://shopify/ProductVariant/47177117007926",
+      "optionName": null,
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177117007926",
+          "label": "Default Title",
+          "priceUSD": 9250,
+          "sku": "FT DDD GDRDSD  008"
+        }
+      ],
+      "unpricedKarats": [],
       "images": [
         {
           "file": "bundle-01.png",
@@ -275,6 +433,30 @@
       "descriptionChars": 365,
       "productId": "gid://shopify/Product/9136282566710",
       "variantId": "gid://shopify/ProductVariant/47177117106230",
+      "optionName": "Material",
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177117106230",
+          "label": ".925 Silver",
+          "priceUSD": 2500,
+          "sku": "FT PW .925 TPW 006"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849621558",
+          "label": "22k Gold",
+          "priceUSD": 18000,
+          "sku": "FT PW .925 TPW 006 22K"
+        },
+        {
+          "id": "gid://shopify/ProductVariant/47195849654326",
+          "label": "24k Gold",
+          "priceUSD": 20000,
+          "sku": "FT PW .925 TPW 006 24K"
+        }
+      ],
+      "unpricedKarats": [
+        18
+      ],
       "images": [
         {
           "file": "pipe-01.png",
@@ -308,6 +490,16 @@
       "descriptionChars": 163,
       "productId": "gid://shopify/Product/9136282599478",
       "variantId": "gid://shopify/ProductVariant/47177117138998",
+      "optionName": null,
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177117138998",
+          "label": "Default Title",
+          "priceUSD": 888,
+          "sku": "FT Hemp Bandana 010"
+        }
+      ],
+      "unpricedKarats": [],
       "images": [
         {
           "file": "hemp-01.png",
@@ -341,6 +533,16 @@
       "descriptionChars": 354,
       "productId": "gid://shopify/Product/9136282697782",
       "variantId": "gid://shopify/ProductVariant/47177117237302",
+      "optionName": null,
+      "variants": [
+        {
+          "id": "gid://shopify/ProductVariant/47177117237302",
+          "label": "Default Title",
+          "priceUSD": 88,
+          "sku": "FT Silk Bandana 011"
+        }
+      ],
+      "unpricedKarats": [],
       "images": [
         {
           "file": "silk-01.jpg",

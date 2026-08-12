@@ -15,8 +15,9 @@ const READ = `query read($q: String!) {
     nodes {
       id handle title status productType vendor tags publishedAt onlineStoreUrl
       description descriptionHtml
-      variants(first: 5) { nodes { id price sku taxable availableForSale inventoryPolicy
-        inventoryQuantity
+      options { id name optionValues { id name } }
+      variants(first: 30) { nodes { id title price sku taxable availableForSale inventoryPolicy
+        inventoryQuantity selectedOptions { name value }
         inventoryItem { id tracked unitCost { amount }
                         measurement { weight { value unit } } } } }
       media(first: 50) { nodes { id alt status
@@ -94,15 +95,37 @@ for (const p of catalogue) {
     }
   }
 
-  // ── variant ────────────────────────────────────────────────────
+  // ── variants ───────────────────────────────────────────────────
+  // A piece with priced gold upgrades carries one variant per option value;
+  // everything else stays single-variant. Either way the set must be exactly
+  // what the sheet describes — no extra option value, no missing upgrade.
   const variants = sp.variants.nodes
-  if (variants.length !== 1) fail(`${variants.length} variants, expected 1`)
-  const v = variants[0]
-  const price = Number(v?.price)
-  if (price !== p.priceUSD) fail(`price $${price} ≠ sheet $${p.priceUSD}`)
-  const wantSku = p.sku || p.slug
-  if (v?.sku !== wantSku) fail(`SKU "${v?.sku}" ≠ sheet "${wantSku}"`)
-  if (v?.taxable !== p.taxable) fail(`taxable ${v?.taxable} ≠ sheet ${p.taxable}`)
+  const wantVariants = p.variants.length
+    ? p.variants
+    : [{ label: null, priceUSD: p.priceUSD, sku: p.sku || p.slug, base: true }]
+
+  if (variants.length !== wantVariants.length) {
+    fail(`${variants.length} variants (${variants.map((x) => x.title).join(', ')}), sheet describes ${wantVariants.length}`)
+  }
+  if (p.variants.length && sp.options[0]?.name !== p.optionName) {
+    fail(`option is named "${sp.options[0]?.name}", expected "${p.optionName}"`)
+  }
+
+  const byLabel = new Map(variants.map((x) => [x.selectedOptions[0]?.value ?? x.title, x]))
+  for (const want of wantVariants) {
+    const got = want.label ? byLabel.get(want.label) : variants[0]
+    if (!got) { fail(`no variant for "${want.label}"`); continue }
+    if (Number(got.price) !== want.priceUSD) {
+      fail(`${want.label ?? 'price'}: $${Number(got.price)} ≠ sheet $${want.priceUSD}`)
+    }
+    const wantSku = want.sku || (want.base ? p.slug : `${p.slug}-${want.label}`)
+    if (got.sku !== wantSku) fail(`${want.label ?? 'SKU'}: SKU "${got.sku}" ≠ sheet "${wantSku}"`)
+    if (got.taxable !== p.taxable) fail(`${want.label ?? 'taxable'}: taxable ${got.taxable} ≠ sheet ${p.taxable}`)
+  }
+
+  // The physical-piece numbers (cost, weight, stock) belong to the base
+  // variant only — a gold upgrade's cost and weight are not in the sheet.
+  const v = p.variants.length ? byLabel.get(p.variants[0].label) : variants[0]
 
   const cost = v?.inventoryItem?.unitCost?.amount
   if (p.costUSD === null) {
@@ -164,8 +187,11 @@ for (const p of catalogue) {
   console.log(
     `  ${ok ? '✓' : '✗'} ${p.slug.padEnd(26)} $${String(p.priceUSD).padEnd(5)} ` +
     `${String(media.length)} img  ${String(norm(sp.description).length).padStart(4)} chars copy  ` +
-    `${sp.publishedAt ? 'published' : 'NOT PUBLISHED'}`,
+    `${String(variants.length)} var  ${sp.publishedAt ? 'published' : 'NOT PUBLISHED'}`,
   )
+  if (p.unpricedKarats.length) {
+    console.log(`      ! ${p.unpricedKarats.map((k) => `${k}k`).join(', ')} offered in the sheet with no price — no variant`)
+  }
 }
 
 console.log()

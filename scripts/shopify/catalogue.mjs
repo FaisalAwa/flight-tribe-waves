@@ -41,7 +41,10 @@ function parseCsv(text) {
   let field = ''
   let quoted = false
   let i = 0
-  const src = text.replace(/^﻿/, '')
+  // Normalise CRLF up front: a spreadsheet's embedded line break inside a
+  // quoted description is a line break either way, and leaving the \r in would
+  // ride along into Shopify's copy.
+  const src = text.replace(/^﻿/, '').replace(/\r\n/g, '\n')
 
   while (i < src.length) {
     const c = src[i]
@@ -94,6 +97,70 @@ function parseWeight(raw) {
 const meaningful = (s) => {
   const t = String(s).trim()
   return /^(na|n\/a|none)$/i.test(t) ? '' : t
+}
+
+/** "61.08gram .925 Silver" → ".925 Silver" — the material with the shipping
+ *  weight stripped off the front, which is the base option's name. */
+function baseMaterial(material) {
+  return String(material)
+    .replace(/^\s*[\d.]+\s*(grams?|kgs?|lbs?|oz|kg|g)\b\s*/i, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim()
+}
+
+/**
+ * Gold-upgrade variants out of the sheet's two free-form columns.
+ *
+ * The values column names each karat and then its price, but with wildly
+ * inconsistent punctuation across rows — "24k -$15,000, -  22k,$14,300 -
+ * 18k,$11,111  Gold", "22k$12,000", "24k $20,000  -  22k $18,000". Rather
+ * than trust one delimiter, the string is cut at each karat token and the
+ * price is taken from that karat's own slice, so a karat with no price can
+ * never inherit the next karat's number.
+ *
+ * A karat listed in the options column but left unpriced in the values column
+ * is returned as `unpriced` — it is NOT given a made-up price.
+ */
+function parseUpgrades(optionsRaw, valuesRaw, line, slug) {
+  const karats = (s) => [...String(s).matchAll(/(\d{1,2})\s*k\b/gi)]
+  const priced = []
+  const tokens = karats(valuesRaw)
+
+  tokens.forEach((t, i) => {
+    const from = t.index + t[0].length
+    const to = i + 1 < tokens.length ? tokens[i + 1].index : valuesRaw.length
+    const slice = valuesRaw.slice(from, to)
+    const m = /(\d[\d,]*(?:\.\d+)?)/.exec(slice)
+    if (!m) return
+    const priceUSD = Number(m[1].replace(/,/g, ''))
+    const karat = Number(t[1])
+    if (!Number.isFinite(priceUSD) || priceUSD <= 0) {
+      throw new Error(`CSV line ${line} (${slug}): unreadable ${karat}k upgrade price "${slice.trim()}"`)
+    }
+    if (priced.some((p) => p.karat === karat)) {
+      throw new Error(`CSV line ${line} (${slug}): ${karat}k is priced twice in "${valuesRaw}"`)
+    }
+    priced.push({ karat, priceUSD })
+  })
+
+  // Accuracy guard: a price for a karat the options column never offers means
+  // the two cells disagree about what this piece can be made in.
+  const offered = new Set(karats(optionsRaw).map((t) => Number(t[1])))
+  for (const p of priced) {
+    if (offered.size && !offered.has(p.karat)) {
+      throw new Error(
+        `CSV line ${line} (${slug}): "${p.karat}k" is priced but is not listed in the ` +
+        `Variants column ("${optionsRaw}"). Fix the sheet; refusing to guess.`,
+      )
+    }
+  }
+  const unpriced = [...offered].filter((k) => !priced.some((p) => p.karat === k)).sort((a, b) => a - b)
+
+  priced.sort((a, b) => a.karat - b.karat)
+  return {
+    priced: priced.map((p) => ({ karat: p.karat, label: `${p.karat}k Gold`, priceUSD: p.priceUSD })),
+    unpriced,
+  }
 }
 
 /**
@@ -199,6 +266,25 @@ export function loadCatalogue() {
     }
 
     const note = at(C.notes)
+    const upgradeOptions = meaningful(at(C.variants))
+    const upgradePricing = meaningful(at(C.variantValues))
+    const upgrades = parseUpgrades(upgradeOptions, upgradePricing, line, slug)
+
+    // The buy options Shopify will actually carry: the piece as photographed
+    // at its list price, then one variant per priced gold upgrade. Pieces with
+    // no priced upgrade stay single-variant.
+    const base = baseMaterial(at(C.weight))
+    const variants = upgrades.priced.length
+      ? [
+          { label: base || 'As shown', priceUSD, sku: at(C.sku), base: true },
+          ...upgrades.priced.map((u) => ({
+            label: u.label,
+            priceUSD: u.priceUSD,
+            sku: at(C.sku) ? `${at(C.sku)} ${u.karat}K` : '',
+            base: false,
+          })),
+        ]
+      : []
 
     return {
       sku: at(C.sku),
@@ -221,8 +307,14 @@ export function loadCatalogue() {
       weight: parseWeight(weightRaw),
       material: weightRaw,
       dimensions: at(C.height),
-      upgradeOptions: meaningful(at(C.variants)),
-      upgradePricing: meaningful(at(C.variantValues)),
+      upgradeOptions,
+      upgradePricing,
+      /** the Shopify option name when this piece has upgrade variants */
+      optionName: 'Material',
+      /** [] when the sheet prices no upgrade — the piece stays single-variant */
+      variants,
+      /** karats offered in the sheet but left without a price — flagged, never invented */
+      unpricedKarats: upgrades.unpriced,
       description: at(C.description),
       images,
       notes: note ? [note] : [],
@@ -258,7 +350,16 @@ if (isMain) {
       `${p.gender}  ·  stock ${p.inventoryQty ?? (p.inventoryNote || '—')}  ·  ` +
       `weight ${p.weight ? `${p.weight.value} ${p.weight.unit}` : '—'}  ·  taxable ${p.taxable}`)
     if (p.dimensions) console.log(`  ${''.padEnd(12)} dims ${p.dimensions}`)
-    if (p.upgradeOptions) console.log(`  ${''.padEnd(12)} upgrades ${p.upgradeOptions}  →  ${p.upgradePricing}`)
+    if (p.variants.length) {
+      console.log(`  ${''.padEnd(12)} ${p.optionName}: ` +
+        p.variants.map((v) => `${v.label} $${v.priceUSD}`).join('  |  '))
+    }
+    if (p.unpricedKarats.length) {
+      console.log(`  ${''.padEnd(12)} ! offered but unpriced: ${p.unpricedKarats.map((k) => `${k}k`).join(', ')}`)
+    }
+    if (p.upgradeOptions && !p.variants.length) {
+      console.log(`  ${''.padEnd(12)} ! upgrades listed but no price parsed: "${p.upgradeOptions}" → "${p.upgradePricing}"`)
+    }
     console.log(`  ${''.padEnd(12)} description ${p.description.length} chars`)
     for (const im of p.images) console.log(`  ${''.padEnd(12)}   ${im.file}`)
     console.log()

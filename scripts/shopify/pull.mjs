@@ -37,7 +37,9 @@ const ALL = `query all($cursor: String) {
     pageInfo { hasNextPage endCursor }
     nodes {
       id handle title status productType tags descriptionHtml description
-      variants(first: 1) { nodes { id price availableForSale } }
+      options { id name }
+      variants(first: 30) { nodes { id title price availableForSale
+        selectedOptions { name value } } }
       media(first: 50) { nodes { alt status
         ... on MediaImage { image { url width height } } } }
       metafields(first: 25, namespace: "flight_tribe") { nodes { key value } }
@@ -88,6 +90,18 @@ const items = live.map((n) => {
   if (!cat) throw new Error(`${n.handle}: product type "${n.productType}" has no category mapping`)
   const variant = n.variants.nodes[0]
   if (!variant) throw new Error(`${n.handle}: no variant`)
+  // Pieces offered in more than one metal carry a real Shopify option; the
+  // first variant is the piece as photographed and sets the headline price.
+  const optionName = n.options[0]?.name
+  const multi = n.variants.nodes.length > 1 && optionName && optionName !== 'Title'
+  const variants = multi
+    ? n.variants.nodes.map((v) => ({
+        id: v.id,
+        label: v.selectedOptions.find((o) => o.name === optionName)?.value ?? v.title,
+        priceUSD: Number(v.price),
+        availableForSale: v.availableForSale,
+      }))
+    : []
   const images = n.media.nodes.filter((m) => m.image?.url).map((m) => m.image.url)
   if (!images.length) throw new Error(`${n.handle}: no images`)
   const mf = new Map(n.metafields.nodes.map((m) => [m.key, (m.value || '').trim()]))
@@ -116,6 +130,8 @@ const items = live.map((n) => {
     // It stays a Shopify metafield for the client to edit; dimensions, which
     // are clean measurements on every row, do reach the PDP.
     dimensions: mf.get('dimensions') || undefined,
+    optionName: multi ? optionName : undefined,
+    variants,
   }
 })
 
@@ -158,6 +174,15 @@ ${Object.values(CATEGORY).map((c) => `  {
 export const categoryById = (id: string): Category | undefined =>
   categories.find((c) => c.id === id)
 
+export interface ProductVariant {
+  /** gid://shopify/ProductVariant/… — what checkout actually buys */
+  id: string
+  /** the option value, e.g. '.925 Silver' or '24k Gold' */
+  label: string
+  priceUSD: number
+  availableForSale: boolean
+}
+
 export interface Product {
   id: string
   slug: string
@@ -178,6 +203,10 @@ export interface Product {
   spec?: string
   /** measured size — flight_tribe.dimensions in Shopify */
   dimensions?: string
+  /** what the buy options are called ("Material") — absent on one-option pieces */
+  optionName?: string
+  /** real Shopify variants, base first. Empty when the piece has only one. */
+  variants: ProductVariant[]
   /** hallmark spec block on the PDP — absent unless Shopify has one */
   hallmark?: string[]
   sizes?: string[]
@@ -195,7 +224,11 @@ ${items.map((p) => `  {
     image: ${lit(p.image)},
     gallery: [
 ${p.gallery.map((g) => `      ${lit(g)},`).join('\n')}
-    ],${p.dimensions ? `\n    dimensions: ${lit(p.dimensions)},` : ''}${p.description ? `\n    description: ${lit(p.description)},` : ''}
+    ],${p.dimensions ? `\n    dimensions: ${lit(p.dimensions)},` : ''}${p.description ? `\n    description: ${lit(p.description)},` : ''}${
+    p.variants.length ? `\n    optionName: ${lit(p.optionName)},
+    variants: [
+${p.variants.map((v) => `      { id: ${lit(v.id)}, label: ${lit(v.label)}, priceUSD: ${v.priceUSD}, availableForSale: ${v.availableForSale} },`).join('\n')}
+    ],` : '\n    variants: [],'}
     variantId: ${lit(p.variantId)},
     productId: ${lit(p.productId)},
     availableForSale: ${p.availableForSale},

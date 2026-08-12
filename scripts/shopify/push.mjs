@@ -53,7 +53,9 @@ const FIND = `query find($q: String!) {
 const READ = `query read($id: ID!) {
   product(id: $id) {
     id handle title status productType vendor tags onlineStoreUrl description
-    variants(first: 1) { nodes { id price sku taxable availableForSale
+    options { id name position optionValues { id name hasVariants } }
+    variants(first: 30) { nodes { id title price sku taxable availableForSale
+      selectedOptions { name value }
       inventoryItem { id tracked unitCost { amount }
                       measurement { weight { value unit } } } } }
     media(first: 50) { nodes { id alt status
@@ -128,15 +130,10 @@ async function upsertProduct(admin, argNames, p) {
   return { id: r.productCreate.product.id, existing: null }
 }
 
-/** Price, SKU, cost, taxable flag and shipping weight — all straight from the
- *  sheet. Stock is tracked only for rows that state a number; the rest keep
- *  Shopify's untracked default rather than being invented as 0. */
-async function setVariant(admin, productId, p) {
-  if (DRY) return null
-  const cur = await admin.gql(READ, { id: productId })
-  const variant = cur.product.variants.nodes[0]
-  if (!variant) throw new Error(`${p.slug}: product has no variant to price`)
-
+/** What the base (as-photographed) variant carries: everything the sheet
+ *  states about the physical piece. Stock is tracked only for rows that give a
+ *  number; the rest keep Shopify's untracked default rather than an invented 0. */
+function baseVariantInput(p) {
   const inventoryItem = {
     tracked: p.inventoryQty !== null,
     requiresShipping: true,
@@ -144,31 +141,162 @@ async function setVariant(admin, productId, p) {
   }
   if (p.costUSD !== null) inventoryItem.cost = money(p.costUSD)
   if (p.weight) inventoryItem.measurement = { weight: { value: p.weight.value, unit: p.weight.unit } }
+  return {
+    price: money(p.priceUSD),
+    taxable: p.taxable,
+    // Stock counts are informational here: CONTINUE keeps every piece
+    // orderable (they are made to order) while still showing the real
+    // number the sheet records.
+    inventoryPolicy: 'CONTINUE',
+    inventoryItem,
+  }
+}
+
+/** A gold-upgrade variant carries only what the sheet actually states about
+ *  it: its price and its SKU. No cost, no weight — those are the silver
+ *  piece's numbers and would be wrong for a gold one. */
+function upgradeVariantInput(p, v) {
+  return {
+    price: money(v.priceUSD),
+    taxable: p.taxable,
+    inventoryPolicy: 'CONTINUE',
+    inventoryItem: { tracked: false, requiresShipping: true, sku: v.sku || `${p.slug}-${v.label}` },
+  }
+}
+
+const VARIANT_FIELDS = `productVariants { id title price sku taxable
+  selectedOptions { name value }
+  inventoryItem { id tracked unitCost { amount }
+                  measurement { weight { value unit } } } }`
+
+/** Single-variant piece: just write the sheet's numbers onto the one variant. */
+async function setSingleVariant(admin, productId, p) {
+  if (DRY) return null
+  const cur = await admin.gql(READ, { id: productId })
+  const variant = cur.product.variants.nodes[0]
+  if (!variant) throw new Error(`${p.slug}: product has no variant to price`)
 
   const r = await admin.gql(
     `mutation price($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
        productVariantsBulkUpdate(productId: $productId, variants: $variants) {
-         productVariants { id price sku taxable
-           inventoryItem { id tracked unitCost { amount }
-                           measurement { weight { value unit } } } }
-         userErrors { field message } } }`,
-    {
-      productId,
-      variants: [{
-        id: variant.id,
-        price: money(p.priceUSD),
-        taxable: p.taxable,
-        // Stock counts are informational here: CONTINUE keeps every piece
-        // orderable (they are made to order) while still showing the real
-        // number the sheet records.
-        inventoryPolicy: 'CONTINUE',
-        inventoryItem,
-      }],
-    },
+         ${VARIANT_FIELDS} userErrors { field message } } }`,
+    { productId, variants: [{ id: variant.id, ...baseVariantInput(p) }] },
   )
   assertNoUserErrors(`variant(${p.slug})`, r.productVariantsBulkUpdate)
   return r.productVariantsBulkUpdate.productVariants[0]
 }
+
+/**
+ * Multi-variant piece: turn Shopify's implicit "Title / Default Title" option
+ * into the sheet's real buy options and reconcile the variant list to it.
+ *
+ * The existing variant is RENAMED into the base option value rather than
+ * deleted and recreated, so its id — the id already sitting in customers'
+ * carts and in src/data/products.ts — survives the change.
+ */
+async function setVariantSet(admin, productId, p) {
+  if (DRY) return null
+  const cur = await admin.gql(READ, { id: productId })
+  const prod = cur.product
+  const wanted = p.variants
+  const baseLabel = wanted[0].label
+
+  if (prod.options.length !== 1) {
+    throw new Error(
+      `${p.slug}: product has ${prod.options.length} options in Shopify (${prod.options.map((o) => o.name).join(', ')}); ` +
+      `the sheet describes exactly one. Refusing to guess which to keep.`,
+    )
+  }
+  const opt = prod.options[0]
+
+  // ── 1. the option itself: name + the full value list ────────────
+  const have = new Map(opt.optionValues.map((v) => [v.name, v.id]))
+  const missing = wanted.map((v) => v.label).filter((label) => !have.has(label))
+  // Shopify's placeholder value becomes the base material; anything else the
+  // sheet no longer lists is left alone here and removed with its variant below.
+  const placeholder = opt.optionValues.find((v) => v.name === 'Default Title')
+  const rename = !have.has(baseLabel) && placeholder ? placeholder : null
+
+  if (opt.name !== p.optionName || rename || missing.length) {
+    const vars = {
+      productId,
+      option: { id: opt.id, name: p.optionName },
+      optionValuesToAdd: missing
+        .filter((label) => !(rename && label === baseLabel))
+        .map((name) => ({ name })),
+      optionValuesToUpdate: rename ? [{ id: rename.id, name: baseLabel }] : [],
+    }
+    const r = await admin.gql(
+      `mutation opt($productId: ID!, $option: OptionUpdateInput!,
+                    $optionValuesToAdd: [OptionValueCreateInput!],
+                    $optionValuesToUpdate: [OptionValueUpdateInput!]) {
+         productOptionUpdate(productId: $productId, option: $option,
+                             optionValuesToAdd: $optionValuesToAdd,
+                             optionValuesToUpdate: $optionValuesToUpdate,
+                             variantStrategy: LEAVE_AS_IS) {
+           userErrors { field message code } } }`,
+      vars,
+    )
+    assertNoUserErrors(`option(${p.slug})`, r.productOptionUpdate)
+  }
+
+  // ── 2. variants: update the ones that exist, create the rest ────
+  const after = await admin.gql(READ, { id: productId })
+  const byValue = new Map(
+    after.product.variants.nodes.map((v) => [v.selectedOptions[0]?.value, v]),
+  )
+
+  const updates = []
+  const creates = []
+  for (const v of wanted) {
+    const input = v.base ? baseVariantInput(p) : upgradeVariantInput(p, v)
+    const existing = byValue.get(v.label)
+    if (existing) updates.push({ id: existing.id, ...input })
+    else creates.push({ optionValues: [{ optionName: p.optionName, name: v.label }], ...input })
+  }
+
+  if (updates.length) {
+    const r = await admin.gql(
+      `mutation upd($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+         productVariantsBulkUpdate(productId: $productId, variants: $variants) {
+           ${VARIANT_FIELDS} userErrors { field message } } }`,
+      { productId, variants: updates },
+    )
+    assertNoUserErrors(`variants(${p.slug})`, r.productVariantsBulkUpdate)
+  }
+  if (creates.length) {
+    const r = await admin.gql(
+      `mutation crt($productId: ID!, $variants: [ProductVariantsBulkInput!]!) {
+         productVariantsBulkCreate(productId: $productId, variants: $variants, strategy: DEFAULT) {
+           ${VARIANT_FIELDS} userErrors { field message } } }`,
+      { productId, variants: creates },
+    )
+    assertNoUserErrors(`variants(${p.slug})`, r.productVariantsBulkCreate)
+  }
+
+  // ── 3. anything Shopify still carries that the sheet dropped ────
+  const keep = new Set(wanted.map((v) => v.label))
+  const stale = [...byValue.entries()]
+    .filter(([value]) => value && !keep.has(value))
+    .map(([, v]) => v.id)
+  if (stale.length) {
+    const r = await admin.gql(
+      `mutation del($productId: ID!, $variantsIds: [ID!]!) {
+         productVariantsBulkDelete(productId: $productId, variantsIds: $variantsIds) {
+           userErrors { field message } } }`,
+      { productId, variantsIds: stale },
+    )
+    assertNoUserErrors(`variantsDelete(${p.slug})`, r.productVariantsBulkDelete)
+  }
+
+  const final = await admin.gql(READ, { id: productId })
+  return final.product.variants.nodes.find((v) => v.selectedOptions[0]?.value === baseLabel)
+    ?? final.product.variants.nodes[0]
+}
+
+/** Write the sheet's buy options onto the product, however many there are. */
+const setVariant = (admin, productId, p) =>
+  (p.variants.length ? setVariantSet : setSingleVariant)(admin, productId, p)
 
 /** Set the on-hand count for rows whose Inventory column is a number. */
 async function setStock(admin, locationId, variant, p) {
@@ -442,7 +570,14 @@ for (const p of catalogue) {
   const { id, existing } = await upsertProduct(admin, argNames, p)
   if (DRY) {
     console.log(`      $${p.priceUSD} · ${p.tag} · ${p.images.length} image(s) · ` +
-      `${p.description.length}-char description · SKU ${p.sku} · ${metafieldsFor(p).length} metafield(s)\n`)
+      `${p.description.length}-char description · SKU ${p.sku} · ${metafieldsFor(p).length} metafield(s)`)
+    if (p.variants.length) {
+      console.log(`      ${p.optionName}: ${p.variants.map((v) => `${v.label} $${v.priceUSD}`).join(' | ')}`)
+    }
+    if (p.unpricedKarats.length) {
+      console.log(`      ! ${p.unpricedKarats.map((k) => `${k}k`).join(', ')} offered in the sheet with no price — no variant made`)
+    }
+    console.log()
     continue
   }
   idBySlug.set(p.slug, id)
@@ -461,6 +596,13 @@ for (const p of catalogue) {
 
   const final = await admin.gql(READ, { id })
   const prod = final.product
+  if (p.variants.length) {
+    console.log(`  options  ${prod.options[0].name}: ` +
+      prod.variants.nodes.map((v) => `${v.selectedOptions[0]?.value} $${v.price}`).join(' | '))
+  }
+  if (p.unpricedKarats.length) {
+    console.log(`  !        ${p.unpricedKarats.map((k) => `${k}k`).join(', ')} offered in the sheet with no price — no variant made`)
+  }
   console.log(`  copy     ${prod.description.trim().length} chars · ${mfCount} metafield(s)`)
   console.log(`  images   ${prod.media.nodes.length} ready`)
 
@@ -479,7 +621,15 @@ for (const p of catalogue) {
     inventoryNote: p.inventoryNote,
     descriptionChars: prod.description.trim().length,
     productId: prod.id,
-    variantId: prod.variants.nodes[0].id,
+    variantId: variant.id,
+    optionName: p.variants.length ? prod.options[0].name : null,
+    variants: prod.variants.nodes.map((v) => ({
+      id: v.id,
+      label: v.selectedOptions[0]?.value ?? v.title,
+      priceUSD: Number(v.price),
+      sku: v.sku,
+    })),
+    unpricedKarats: p.unpricedKarats,
     images: p.images.map((im) => {
       const m = prod.media.nodes.find((n) => n.alt === im.file)
       return { file: im.file, source: im.url, cdn: m?.image?.url ?? null,

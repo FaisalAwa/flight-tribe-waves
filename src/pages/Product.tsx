@@ -33,6 +33,8 @@ export default function Product() {
   const root = useRef<HTMLDivElement>(null)
   const [shot, setShot] = useState(0)
   const [size, setSize] = useState<string | null>(null)
+  // index into product.variants — 0 is the piece as photographed
+  const [variantIdx, setVariantIdx] = useState(0)
   const [fired, setFired] = useState(false)
   const [ripple, setRipple] = useState<{ x: number; y: number; key: number } | null>(null)
   const { add, count } = useCart()
@@ -47,6 +49,7 @@ export default function Product() {
     if (!product) { setZoomOpen(false); return }
     setShot(0)
     setSize(null)
+    setVariantIdx(0)
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
     const ctx = gsap.context(() => {
       gsap.from('.pdp__reveal', { y: reduce ? 0 : 32, opacity: reduce ? 1 : 0, duration: reduce ? 0.01 : 0.8, ease: 'power3.out', stagger: reduce ? 0 : 0.08 })
@@ -122,21 +125,33 @@ export default function Product() {
   const craft = craftVerb(product.tag)
   const needsSize = !!(product.sizes && product.sizes.length > 0)
 
+  // Pieces the client offers in more than one metal carry real Shopify
+  // variants, each with its own real price — so the selector below can only
+  // ever quote a figure checkout will honour.
+  const variants = product.variants ?? []
+  const chosen = variants[variantIdx] ?? variants[0] ?? null
+  const priceUSD = chosen ? chosen.priceUSD : product.priceUSD
+  const variantId = chosen ? chosen.id : product.variantId
+
   const onAdd = () => {
     if (needsSize && !size) return  // guard: no sizeless made-to-order ring
 
-    // Build unique cart id: product + optional size
+    // Build unique cart id: product + optional metal + optional size
     const idParts = [product.id]
+    if (chosen && variantIdx > 0) idParts.push(chosen.label)
     if (size) idParts.push(size)
 
-    const specParts = [product.spec, size ? `Size ${size}` : null].filter(Boolean) as string[]
+    const specParts = [
+      chosen && variants.length > 1 ? chosen.label : product.spec,
+      size ? `Size ${size}` : null,
+    ].filter(Boolean) as string[]
 
     add({
       id: idParts.join('-'),
       slug: product.slug, name: product.name,
       spec: specParts.length ? specParts.join(' · ') : undefined,
-      image: product.image, priceUSD: product.priceUSD, gem: `var(--gem-${product.gem})`,
-      variantId: product.variantId,
+      image: product.image, priceUSD, gem: `var(--gem-${product.gem})`,
+      variantId,
     })
     setFired(false)
     requestAnimationFrame(() => setFired(true))
@@ -237,13 +252,31 @@ export default function Product() {
           </div>
 
           <p style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 12 }}>
-            <span className="display" style={{ fontSize: 'clamp(30px,3.4vw,44px)' }}>{formatPrice(product.priceUSD)}</span>
+            <span className="display" style={{ fontSize: 'clamp(30px,3.4vw,44px)' }}>{formatPrice(priceUSD)}</span>
           </p>
 
-          {/* The karat selector that used to sit here quoted 10/14/18KT prices
-              derived from a multiplier, not from the store. Each piece is one
-              Shopify variant at one real price, so it was removed rather than
-              left showing figures checkout could never honour. */}
+          {/* Metal — a karat selector used to sit here quoting prices derived
+              from a multiplier rather than from the store, and was removed.
+              These options are the real thing: one Shopify variant per metal,
+              each at the price the client set, so every figure shown is one
+              checkout will honour. */}
+          {variants.length > 1 && (
+            <div className="pdp-sizes">
+              <div className="pdp-sizes__head">
+                <Hallmark className="pdp-fulfill__label">{product.optionName ?? 'Material'}</Hallmark>
+              </div>
+              <div className="pdp-sizes__row" role="radiogroup" aria-label={product.optionName ?? 'Material'}>
+                {variants.map((v, i) => (
+                  <button
+                    key={v.id} type="button" role="radio" aria-checked={i === variantIdx}
+                    className="pdp-size" data-active={i === variantIdx} onClick={() => setVariantIdx(i)}
+                  >
+                    {v.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
 
           {/* Size — only where size is load-bearing (rings). Add-to-Bag is
               gated until one is chosen so a made-to-order ring can't be
