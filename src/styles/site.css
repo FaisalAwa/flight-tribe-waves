@@ -79,6 +79,25 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   .hero-atmosphere__video { animation: none; }
 }
 
+/* ─── Tribe hero backdrop — static bench photo, replaces the ChromeField
+   liquid-video loop on THIS page only (Home's hero-video is unrelated and
+   keeps its own video). Same grade/vignette language as the rest of the
+   site's dark photography (bench-eagle, earth-vid) so swapping video for a
+   still doesn't read as a downgrade. */
+.tribe-hero-photo {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden; pointer-events: none;
+  background: var(--c-pit);
+}
+.tribe-hero-photo__img {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  object-position: center 32%;
+  filter: grayscale(0.35) contrast(1.12) brightness(0.6);
+}
+.tribe-hero-photo__vignette {
+  position: absolute; inset: 0;
+  background: radial-gradient(122% 96% at 50% 36%, transparent 40%, var(--c-pit) 97%);
+}
+
 /* ─── Hairline top bar ────────────────────────────────────────── */
 .topbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 90;

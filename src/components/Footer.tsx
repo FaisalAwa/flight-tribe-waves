@@ -93,7 +93,7 @@ export function Footer() {
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <Hallmark className="eyebrow footer__colhead">The Tribe</Hallmark>
-            <Link className="topbar__link footer__label--big" to="/tribe">The Story</Link>
+            <Link className="topbar__link" to="/tribe">The Story</Link>
             <Link className="topbar__link" to="/contact">Contact</Link>
             <Link className="topbar__link" to="/cart">Bag</Link>
           </div>

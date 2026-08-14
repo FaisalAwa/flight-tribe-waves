@@ -1,6 +1,6 @@
 import { useLayoutEffect, useRef } from 'react'
 import gsap from 'gsap'
-import { Hallmark, EyeSigil, Globe, MagneticBtn, ChromeField } from '@/components'
+import { Hallmark, EyeSigil, Globe, MagneticBtn } from '@/components'
 import { currentYearRoman } from '@/lib/year'
 
 /* ═══════════════════════════════════════════════════════════════
@@ -60,9 +60,18 @@ export default function Tribe() {
 
       {/* ── BEAT 1 · COLD OPEN ─────────────────────────────────── */}
       <section style={{ position: 'relative', minHeight: '100vh', overflow: 'hidden', background: 'var(--c-pit)', display: 'flex', alignItems: 'center' }}>
-        {/* same ambient liquid-chrome backdrop as the Home hero — the addendum
-            calls for this behind Hero AND Tribe/About specifically. */}
-        <ChromeField />
+        {/* static bench photo backdrop — replaces the liquid-chrome/dice video
+            loop that used to run here (ChromeField), per client request. */}
+        <div className="tribe-hero-photo" aria-hidden="true">
+          <img
+            className="tribe-hero-photo__img"
+            src="/assets/tribe-hero-bench.png"
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+          <span className="tribe-hero-photo__vignette" />
+        </div>
         <div style={{ position: 'absolute', top: 'calc(60px + var(--s-sm))', left: 'var(--gutter)', display: 'flex', alignItems: 'center', gap: 12, color: 'var(--c-chrome)' }}>
           <Globe size={34} />
           <Hallmark className="eyebrow">The Tribe — Field Notes</Hallmark>

@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef } from 'react'
+import { useEffect, useLayoutEffect, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import gsap from 'gsap'
 import { Hallmark } from './Sigil'
@@ -82,6 +82,26 @@ export function HeroReveal({ dice }: HeroRevealProps) {
     return () => ctx.revert()
   }, [reduce])
 
+  // Belt-and-suspenders autoplay: the `autoPlay` attribute alone is silently
+  // ignored by some in-app browsers (e.g. WhatsApp's WKWebView), which then
+  // fall back to showing a native tap-to-play button over the poster frame —
+  // exactly the "pause/play control visible" bug this guards against. Forcing
+  // play() imperatively (same pattern as ChromeField's hero-atmosphere video)
+  // closes that gap; muted+playsInline keeps it allowed everywhere.
+  useEffect(() => {
+    if (reduce) return
+    const video = videoRef.current
+    if (!video) return
+    const tryPlay = () => video.play().catch(() => {})
+    tryPlay()
+    video.addEventListener('loadeddata', tryPlay)
+    video.addEventListener('canplay', tryPlay)
+    return () => {
+      video.removeEventListener('loadeddata', tryPlay)
+      video.removeEventListener('canplay', tryPlay)
+    }
+  }, [reduce])
+
   return (
     <div ref={root}>
       <section className="hero-video" data-gem="ruby">
@@ -96,6 +116,9 @@ export function HeroReveal({ dice }: HeroRevealProps) {
           loop={!reduce}
           playsInline
           autoPlay={!reduce}
+          preload="auto"
+          disablePictureInPicture
+          controls={false}
           aria-hidden="true"
         />
         {/* legibility scrim — vignette + top/bottom fade, keeps the void cold */}
