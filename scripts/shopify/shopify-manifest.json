@@ -359,18 +359,18 @@
       "unpricedKarats": [],
       "images": [
         {
-          "file": "bundle-01.png",
-          "source": "https://flight-tribe-site.vercel.app/assets/products/real/bundle-01.png",
-          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01.png?v=1786380259",
-          "width": 2552,
-          "height": 2552
+          "file": "bundle-01-new.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/bundle-01-new.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01-new.png?v=1786712170",
+          "width": 946,
+          "height": 2048
         },
         {
-          "file": "bundle-02.png",
-          "source": "https://flight-tribe-site.vercel.app/assets/products/real/bundle-02.png",
-          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02.png?v=1786380258",
-          "width": 1685,
-          "height": 1685
+          "file": "bundle-02-new.png",
+          "source": "https://flight-tribe-site.vercel.app/assets/products/real/bundle-02-new.png",
+          "cdn": "https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02-new.png?v=1786712170",
+          "width": 946,
+          "height": 2048
         }
       ]
     },

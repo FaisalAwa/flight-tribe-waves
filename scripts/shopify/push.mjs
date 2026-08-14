@@ -19,8 +19,8 @@
    so nothing is duplicated. Run with --dry to preview without writing.
    ═══════════════════════════════════════════════════════════════ */
 
-import { writeFileSync } from 'node:fs'
-import { resolve } from 'node:path'
+import { writeFileSync, readFileSync, statSync } from 'node:fs'
+import { resolve, basename, extname } from 'node:path'
 import { loadCatalogue, descriptionHtml, REPO_ROOT } from './catalogue.mjs'
 import { Admin, assertNoUserErrors } from './client.mjs'
 
@@ -399,40 +399,59 @@ async function setMetafields(admin, productId, p) {
   return fields.length
 }
 
-/** Attach images by URL. Alt text = the CSV "Image File" name, which is the
- *  idempotency key: an image whose alt is already on the product is skipped. */
-async function syncMedia(admin, productId, p) {
-  const cur = await admin.gql(READ, { id: productId })
-  const have = new Set(cur.product.media.nodes.map((m) => m.alt).filter(Boolean))
-  const missing = p.images.filter((im) => !have.has(im.file))
+const MIME = {
+  '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
+  '.webp': 'image/webp', '.gif': 'image/gif',
+}
 
-  if (!missing.length) return cur.product.media.nodes
-  if (DRY) {
-    missing.forEach((im) => console.log(`      + image ${im.file}`))
-    return []
-  }
+/**
+ * Put a file from this checkout into Shopify's staging bucket and hand back the
+ * resource url productCreateMedia can ingest.
+ *
+ * Shopify can only fetch a website URL that already resolves, and a photo that
+ * was just swapped into public/ is not on the deployed site yet. Worse, the
+ * site rewrites unknown paths to index.html, so the fetch would succeed and
+ * quietly attach an HTML page as the product shot. Uploading the bytes removes
+ * the deploy from the critical path entirely.
+ */
+async function stageLocalFile(admin, localPath) {
+  const filename = basename(localPath)
+  const mimeType = MIME[extname(filename).toLowerCase()]
+  if (!mimeType) throw new Error(`${filename}: not an image type Shopify accepts`)
 
   const r = await admin.gql(
-    `mutation media($productId: ID!, $media: [CreateMediaInput!]!) {
-       productCreateMedia(productId: $productId, media: $media) {
-         media { ... on MediaImage { id alt status } }
-         mediaUserErrors { field message } } }`,
+    `mutation stage($input: [StagedUploadInput!]!) {
+       stagedUploadsCreate(input: $input) {
+         stagedTargets { url resourceUrl parameters { name value } }
+         userErrors { field message } } }`,
     {
-      productId,
-      media: missing.map((im) => ({
-        originalSource: im.url,
-        alt: im.file,
-        mediaContentType: 'IMAGE',
-      })),
+      input: [{
+        filename,
+        mimeType,
+        httpMethod: 'POST',
+        resource: 'IMAGE',
+        fileSize: String(statSync(localPath).size),
+      }],
     },
   )
-  const errs = r.productCreateMedia.mediaUserErrors ?? []
-  if (errs.length) {
-    throw new Error(`media(${p.slug}) failed:\n${errs.map((e) => `  • ${(e.field || []).join('.')}: ${e.message}`).join('\n')}`)
-  }
+  assertNoUserErrors(`stagedUploadsCreate(${filename})`, r.stagedUploadsCreate)
+  const target = r.stagedUploadsCreate.stagedTargets[0]
+  if (!target) throw new Error(`${filename}: Shopify returned no staged upload target`)
 
-  // Shopify fetches the URL asynchronously — wait until every file is READY so
-  // a FAILED download can never be mistaken for a successful upload.
+  const form = new FormData()
+  for (const { name, value } of target.parameters) form.append(name, value)
+  form.append('file', new Blob([readFileSync(localPath)], { type: mimeType }), filename)
+
+  const res = await fetch(target.url, { method: 'POST', body: form })
+  if (!res.ok) {
+    throw new Error(`${filename}: staged upload failed — HTTP ${res.status} ${(await res.text()).slice(0, 300)}`)
+  }
+  return target.resourceUrl
+}
+
+/** Shopify ingests media asynchronously — wait until every file is READY, so a
+ *  FAILED download can never be mistaken for a successful upload. */
+async function waitForMedia(admin, productId, p) {
   for (let attempt = 0; attempt < 40; attempt++) {
     await sleep(1500)
     const check = await admin.gql(READ, { id: productId })
@@ -445,6 +464,71 @@ async function syncMedia(admin, productId, p) {
     if (!pending.length) return nodes
   }
   throw new Error(`${p.slug}: images still processing after 60s`)
+}
+
+/** Make the product's gallery the sheet's gallery. Alt text = the CSV "Image
+ *  File" name, which is the idempotency key: an image whose alt is already on
+ *  the product is left alone, an alt the sheet no longer lists comes off. */
+async function syncMedia(admin, productId, p) {
+  const cur = await admin.gql(READ, { id: productId })
+  const have = new Set(cur.product.media.nodes.map((m) => m.alt).filter(Boolean))
+  const wanted = new Set(p.images.map((im) => im.file))
+  const missing = p.images.filter((im) => !have.has(im.file))
+  // A shot the sheet has replaced. Without this the old and the new both sit
+  // in the gallery and the buyer sees the retired photo first.
+  const stale = cur.product.media.nodes.filter((m) => m.alt && !wanted.has(m.alt))
+
+  if (!missing.length && !stale.length) return cur.product.media.nodes
+  if (DRY) {
+    missing.forEach((im) => console.log(`      + image ${im.file}${im.localPath ? '  (uploaded from this checkout)' : ''}`))
+    stale.forEach((m) => console.log(`      - image ${m.alt}  (no longer in the sheet)`))
+    return []
+  }
+
+  let nodes = cur.product.media.nodes
+
+  if (missing.length) {
+    const media = []
+    for (const im of missing) {
+      console.log(`      + image ${im.file}${im.localPath ? '  (uploaded from this checkout)' : ''}`)
+      media.push({
+        originalSource: im.localPath ? await stageLocalFile(admin, im.localPath) : im.url,
+        alt: im.file,
+        mediaContentType: 'IMAGE',
+      })
+    }
+    const r = await admin.gql(
+      `mutation media($productId: ID!, $media: [CreateMediaInput!]!) {
+         productCreateMedia(productId: $productId, media: $media) {
+           media { ... on MediaImage { id alt status } }
+           mediaUserErrors { field message } } }`,
+      { productId, media },
+    )
+    const errs = r.productCreateMedia.mediaUserErrors ?? []
+    if (errs.length) {
+      throw new Error(`media(${p.slug}) failed:\n${errs.map((e) => `  • ${(e.field || []).join('.')}: ${e.message}`).join('\n')}`)
+    }
+    nodes = await waitForMedia(admin, productId, p)
+  }
+
+  // Deleted only after the replacements are READY, so a failed upload leaves
+  // the product with its old gallery rather than with none.
+  if (stale.length) {
+    stale.forEach((m) => console.log(`      - image ${m.alt}  (no longer in the sheet)`))
+    const r = await admin.gql(
+      `mutation drop($productId: ID!, $mediaIds: [ID!]!) {
+         productDeleteMedia(productId: $productId, mediaIds: $mediaIds) {
+           deletedMediaIds mediaUserErrors { field message } } }`,
+      { productId, mediaIds: stale.map((m) => m.id) },
+    )
+    const errs = r.productDeleteMedia.mediaUserErrors ?? []
+    if (errs.length) {
+      throw new Error(`media delete(${p.slug}) failed:\n${errs.map((e) => `  • ${(e.field || []).join('.')}: ${e.message}`).join('\n')}`)
+    }
+    nodes = (await admin.gql(READ, { id: productId })).product.media.nodes
+  }
+
+  return nodes
 }
 
 /** Order the product's media to match the CSV row order. */

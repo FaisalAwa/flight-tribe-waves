@@ -7,6 +7,7 @@
    the source files). Exits non-zero on any mismatch, so it can gate a deploy.
    ═══════════════════════════════════════════════════════════════ */
 
+import { readFileSync } from 'node:fs'
 import { loadCatalogue, descriptionHtml } from './catalogue.mjs'
 import { Admin } from './client.mjs'
 
@@ -38,10 +39,14 @@ const norm = (s) => String(s ?? '')
   .join('\n')
   .trim()
 
-/** Pixel dimensions of a remote PNG/JPEG, read from the header bytes only. */
-async function sourceDimensions(url) {
-  const res = await fetch(url, { headers: { Range: 'bytes=0-65535' } })
-  const buf = Buffer.from(await res.arrayBuffer())
+/** Pixel dimensions of the source PNG/JPEG, read from the header bytes only.
+ *  Prefers the copy in this checkout: a photo swapped in since the last deploy
+ *  is not at its website URL yet, and the site answers unknown paths with
+ *  index.html, which would read as "dimensions unknown" and skip the check. */
+async function sourceDimensions(im) {
+  const buf = im.localPath
+    ? readFileSync(im.localPath).subarray(0, 65536)
+    : Buffer.from(await (await fetch(im.url, { headers: { Range: 'bytes=0-65535' } })).arrayBuffer())
   if (buf[0] === 0x89 && buf[1] === 0x50) {
     return { w: buf.readUInt32BE(16), h: buf.readUInt32BE(20) }
   }
@@ -175,7 +180,7 @@ for (const p of catalogue) {
     if (m.alt !== im.file) fail(`image ${i + 1} is "${m.alt}", sheet says "${im.file}"`)
     if (m.status !== 'READY') fail(`image ${im.file} status ${m.status}`)
     if (!m.image?.url) { fail(`image ${im.file} has no CDN url`); continue }
-    const src = await sourceDimensions(im.url)
+    const src = await sourceDimensions(im)
     if (src && (src.w !== m.image.width || src.h !== m.image.height)) {
       fail(`image ${im.file} is ${m.image.width}×${m.image.height} on Shopify but ${src.w}×${src.h} at source`)
     }

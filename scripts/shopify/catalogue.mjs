@@ -23,7 +23,7 @@
    count vs listed images) abort the run rather than silently picking one.
    ═══════════════════════════════════════════════════════════════ */
 
-import { readFileSync } from 'node:fs'
+import { readFileSync, existsSync } from 'node:fs'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 import { dirname, resolve } from 'node:path'
 
@@ -91,6 +91,23 @@ function parseWeight(raw) {
   const unit = WEIGHT_UNIT[m[2].toLowerCase()]
   if (!Number.isFinite(value) || value <= 0 || !unit) return null
   return { value, unit }
+}
+
+/**
+ * The copy of an image that lives in this checkout, or null.
+ *
+ * The site is served out of public/, so the sheet's website URL and the repo
+ * path are the same path either side of the origin. This matters because a
+ * freshly swapped photo is in the repo before it is on the deployed site, and
+ * the site rewrites every unknown path to index.html — so a Shopify fetch of
+ * the not-yet-deployed URL would quietly ingest an HTML page as the product
+ * shot. push.mjs uploads the local file directly whenever one is here.
+ */
+function localPathFor(url) {
+  let pathname
+  try { pathname = new URL(url).pathname } catch { return null }
+  const p = resolve(REPO_ROOT, 'public' + decodeURIComponent(pathname))
+  return existsSync(p) ? p : null
 }
 
 /** "na" / "Na" / "" all mean "this column is empty on this row". */
@@ -169,7 +186,8 @@ function parseUpgrades(optionsRaw, valuesRaw, line, slug) {
  *            collection:string,inventoryQty:number|null,inventoryNote:string,
  *            taxable:boolean,weight:{value:number,unit:string}|null,material:string,
  *            dimensions:string,upgradeOptions:string,upgradePricing:string,
- *            description:string,images:{file:string,url:string}[],notes:string[]}[]}
+ *            description:string,images:{file:string,url:string,localPath:string|null}[],
+ *            notes:string[]}[]}
  */
 export function loadCatalogue() {
   const rows = parseCsv(readFileSync(CSV_PATH, 'utf8'))
@@ -253,7 +271,7 @@ export function loadCatalogue() {
       if (!file || !url) throw new Error(`CSV line ${line}: image row has a file or URL but not both`)
       if (!/^https:\/\//.test(url)) throw new Error(`CSV line ${line}: bad image URL "${url}"`)
       if (images.some((im) => im.url === url)) throw new Error(`CSV line ${line}: duplicate image ${file}`)
-      images.push({ file, url })
+      images.push({ file, url, localPath: localPathFor(url) })
     }
     if (!images.length) throw new Error(`CSV line ${line}: no images`)
 
@@ -361,7 +379,9 @@ if (isMain) {
       console.log(`  ${''.padEnd(12)} ! upgrades listed but no price parsed: "${p.upgradeOptions}" → "${p.upgradePricing}"`)
     }
     console.log(`  ${''.padEnd(12)} description ${p.description.length} chars`)
-    for (const im of p.images) console.log(`  ${''.padEnd(12)}   ${im.file}`)
+    for (const im of p.images) {
+      console.log(`  ${''.padEnd(12)}   ${im.file}${im.localPath ? '  (in this checkout)' : ''}`)
+    }
     console.log()
   }
   const noDesc = cat.filter((p) => !p.description)

@@ -208,10 +208,10 @@ export const products: Product[] = [
     category: 'accessories', gem: 'ruby', priceUSD: 6000,
     tag: 'Rare',
     focal: 'center center',
-    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01.png?v=1786380259',
+    image: 'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01-new.png?v=1786712170',
     gallery: [
-      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01.png?v=1786380259',
-      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02.png?v=1786380258',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01-new.png?v=1786712170',
+      'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02-new.png?v=1786712170',
     ],
     dimensions: '7/16 inch HxW',
     description: 'Crafted from solid .925 sterling silver, the Flight Tribe IceMan U.S. Mined Montana Blue Sapphire Artifact Dice Collection is hand-set with authentic Montana blue sapphires, responsibly sourced from the rugged landscapes of Big Sky Country. Forged beneath endless skies and shaped by the untamed American West, these rare sapphires embody clarity, resilience, freedom, and the courage to forge your own path. Their naturally shifting shades of blue reflect the mountain lakes and open skies that inspired generations of explorers and aviators. Precision crafted and mirror polished, each collectible is a timeless expression of luxury, heritage, and the Flight Tribe spirit of adventure.',
