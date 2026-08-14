@@ -86,11 +86,21 @@ export const ChromeField = memo(function ChromeField() {
     window.addEventListener('pointermove', onMove, { passive: true })
     raf = requestAnimationFrame(tick)
 
-    video.play().catch(() => {})
+    // Belt-and-suspenders autoplay (same pattern as HeroReveal): the IntersectionObserver
+    // above calls play() once the wrapper scrolls into view, but if the video isn't ready
+    // yet that play() call can reject and nothing retries it — some in-app browsers (e.g.
+    // WhatsApp's WKWebView) need play() re-fired once the media actually has data, or they
+    // fall back to a native tap-to-play control over the poster frame.
+    const tryPlay = () => video.play().catch(() => {})
+    tryPlay()
+    video.addEventListener('loadeddata', tryPlay)
+    video.addEventListener('canplay', tryPlay)
 
     return () => {
       cancelAnimationFrame(raf)
       window.removeEventListener('pointermove', onMove)
+      video.removeEventListener('loadeddata', tryPlay)
+      video.removeEventListener('canplay', tryPlay)
       io.disconnect()
     }
   }, [])
@@ -106,6 +116,8 @@ export const ChromeField = memo(function ChromeField() {
         loop
         playsInline
         preload="auto"
+        controls={false}
+        disablePictureInPicture
       />
       <div className="hero-atmosphere__tint" />
       <div className="hero-atmosphere__vignette" />
