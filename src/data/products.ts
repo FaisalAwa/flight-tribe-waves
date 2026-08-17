@@ -235,6 +235,8 @@ export const products: Product[] = [
     gallery: [
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-01_20371868-1eed-473e-b522-e9c7d50380ba.png?v=1786380267',
       'https://cdn.shopify.com/s/files/1/0769/1576/9398/files/bundle-02_3d398916-6d7b-4294-92e5-d7d3bef480c5.png?v=1786380267',
+      '/assets/products/dice-cash-color.jpg',
+      '/assets/products/dice-cash-bw.jpg',
     ],
     dimensions: '7/16 inch HxW',
     description: 'The Flight Tribe Artifact Dice Collection\n\nThe Flight Tribe Artifact Dice Collection brings together three signature relics, each forged from solid .925 sterling silver and inspired by a different path of the journey. From the patriotic spirit of the Liberty 250™ Gemstone Artifact Dice, to the legendary power of the Ruby Relic Dice, and the untamed frontier captured in the IceMan U.S. Mined Montana Blue Sapphire Artifact Dice, every piece is crafted as a modern heirloom.\n\nAcross cultures, dice have symbolized fate, destiny, and the unknown reminders that every journey begins with a single choice. Hand-finished and created in limited numbers, each Artifact Die is more than a collectible; it is a talisman for those who trust instinct, embrace adventure, and forge their own path.',

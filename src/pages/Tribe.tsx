@@ -4,11 +4,11 @@ import { Hallmark, EyeSigil, Globe, MagneticBtn } from '@/components'
 import { currentYearRoman } from '@/lib/year'
 
 /* ═══════════════════════════════════════════════════════════════
-   TRIBE — the story (vault-grade rebuild, critique-approved blueprint).
-   Broken 12-col grid, left-locked type, right-edge image bleeds, vertical
-   gutter captions. NO centered symmetry, NO dividers. One gem (amethyst) held
-   back for 5 beats, released once. Earth-worship = respect for MATERIAL, stated
-   secularly — no religious iconography/copy (client hard rule).
+   TRIBE — The Flight Tribe Story. Copy is the client's own words, verbatim
+   from Flight_Tribe_Luxury_Streetwear_About_Page.docx (Drive → Written
+   Content), laid into the vault-grade broken-grid blueprint: left-locked
+   type, right-edge image bleeds, vertical gutter captions, one gem
+   (amethyst) held back for 5 beats, released once.
    ═══════════════════════════════════════════════════════════════ */
 export default function Tribe() {
   const root = useRef<HTMLDivElement>(null)
@@ -74,28 +74,28 @@ export default function Tribe() {
         </div>
         <div style={{ position: 'absolute', top: 'calc(60px + var(--s-sm))', left: 'var(--gutter)', display: 'flex', alignItems: 'center', gap: 12, color: 'var(--c-chrome)' }}>
           <Globe size={34} />
-          <Hallmark className="eyebrow">The Tribe — Field Notes</Hallmark>
+          <Hallmark className="eyebrow">The Flight Tribe Story</Hallmark>
         </div>
         <h1 className="display" style={{ position: 'relative', zIndex: 2, fontSize: 'clamp(72px, 20vw, 320px)', lineHeight: 0.86, letterSpacing: '-0.02em', marginLeft: 'calc(var(--gutter) - 0.06em)' }}>
           Flight<br />Tribe
         </h1>
-        <span className="vcap" style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%) rotate(180deg)' }}>Est. on Earth · {currentYearRoman()}</span>
+        <span className="vcap" style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%) rotate(180deg)' }}>Move Different · Live Legendary</span>
       </section>
 
       {/* ── BEAT 2 · THESIS ────────────────────────────────────── */}
       <section className="wrap" style={{ paddingTop: 'var(--s-lg)', paddingBottom: 'var(--s-lg)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: 'var(--gutter)', alignItems: 'end' }}>
           <div className="t-reveal" style={{ gridColumn: '1 / span 8' }}>
-            <Hallmark className="eyebrow gem">01 — The thesis</Hallmark>
+            <Hallmark className="eyebrow gem">01 — Move different</Hallmark>
             <p className="display" style={{ fontSize: 'var(--t-h2)', lineHeight: 1.02, textTransform: 'none', margin: '18px 0 20px' }}>
-              Flight Tribe is a bench, a torch, and a mark.
+              Flight Tribe started with a simple idea: move different.
             </p>
             <p className="body" style={{ color: 'var(--c-muted)', maxWidth: 620, fontSize: 'clamp(15px,1.4vw,18px)', lineHeight: 1.8 }}>
-              We cut from solid sterling and finish by hand — no moulds pulled by the thousand. The metal is honest; the stamp proves it.
+              Created by designer Johnny Flight, Flight Tribe is about freedom, creativity, and finding your own path. We make jewelry, clothing, and art for people who don't want to follow the crowd.
             </p>
             <div style={{ marginTop: 22 }}><Hallmark>.925 · Made on Earth · {currentYearRoman()}</Hallmark></div>
           </div>
-          <span className="vcap" style={{ gridColumn: '11 / span 2', justifySelf: 'end' }}>No church · Only craft</span>
+          <span className="vcap" style={{ gridColumn: '11 / span 2', justifySelf: 'end' }}>Designed by Johnny Flight</span>
         </div>
       </section>
 
@@ -109,11 +109,11 @@ export default function Tribe() {
         <div className="wrap" style={{ position: 'relative', zIndex: 3 }}>
           <Hallmark className="eyebrow gem">02 — The bench</Hallmark>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6, marginTop: 14 }}>
-            {['Cut from solid', 'Finished by hand', 'Struck, not stamped'].map((l) => (
-              <h2 key={l} className="bench-line display" style={{ fontSize: 'clamp(34px,6vw,88px)', lineHeight: 1 }}>{l}</h2>
+            {['Handcrafted silver & gold', 'Gemstones, hemp & silk', 'Old-world meets streetwear'].map((l) => (
+              <h2 key={l} className="bench-line display" style={{ fontSize: 'clamp(28px,5vw,74px)', lineHeight: 1 }}>{l}</h2>
             ))}
           </div>
-          <p className="body" style={{ color: 'var(--c-muted)', maxWidth: 460, marginTop: 22 }}>One bench. One torch. Every edge carries a hand.</p>
+          <p className="body" style={{ color: 'var(--c-muted)', maxWidth: 460, marginTop: 22 }}>Everything we make is meant to feel personal, different, and built to last.</p>
         </div>
         <span style={{ position: 'absolute', bottom: 'var(--s-md)', right: 'var(--gutter)', zIndex: 3, color: 'var(--c-chrome)' }}><EyeSigil size={26} title="" /></span>
       </section>
@@ -126,12 +126,12 @@ export default function Tribe() {
             <span className="vcap">The ground we stand on</span>
           </div>
           <div className="t-reveal" style={{ gridColumn: '4 / span 6' }}>
-            <Hallmark className="eyebrow gem">03 — Two marks, no church</Hallmark>
+            <Hallmark className="eyebrow gem">03 — Who it's for</Hallmark>
             <p className="display" style={{ fontSize: 'clamp(26px,3.4vw,52px)', lineHeight: 1.05, textTransform: 'none', margin: '16px 0' }}>
-              The globe is the ground. The eye is the tribe watching its own.
+              Flight Tribe is for collectors, creators, travelers, and anyone who sees life as an adventure.
             </p>
             <p className="body" style={{ color: 'var(--c-muted)', maxWidth: 520, lineHeight: 1.8 }}>
-              Earth-worship here means respect for material — silver, stone, fire, and the hand. Two secular marks, struck into the metal. Nothing borrowed, nothing sacred.
+              Two marks carried across every piece — the globe for the road ahead, the eye for the tribe that's got your back.
             </p>
           </div>
           <div style={{ gridColumn: '11 / span 2', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
@@ -156,6 +156,20 @@ export default function Tribe() {
         <div className="frame frame--cut" style={{ position: 'absolute', right: '-3vw', top: '18%', width: 'min(26vw,300px)', aspectRatio: '1', borderRadius: 2, opacity: 0.9 }}>
           <img className="frame__img frame__img--cut" src="/assets/products/dice-eye-cut.png" alt="Eye sigil struck into a sterling die" loading="lazy" />
         </div>
+      </section>
+
+      {/* ── BEAT 5.5 · THE STAKES (real product, real-world context) ── */}
+      <section className="wrap" style={{ paddingTop: 'var(--s-lg)', paddingBottom: 'var(--s-lg)' }}>
+        <div className="t-reveal frame frame--cut" style={{ aspectRatio: '21 / 9', borderRadius: 2, margin: '0 auto', maxWidth: 980 }}>
+          <img
+            className="frame__img frame__img--cut" src="/assets/products/dice-cash-bw.jpg"
+            alt="Flight Tribe Artifact Dice, hand-set in solid .925 silver"
+            style={{ objectPosition: 'center 30%' }} loading="lazy"
+          />
+        </div>
+        <p className="body" style={{ color: 'var(--c-muted)', maxWidth: 460, margin: '18px auto 0', textAlign: 'center' }}>
+          Every artifact die is struck in solid .925 silver — a collectible built to hold its value.
+        </p>
       </section>
 
       {/* ── BEAT 6 · ONE GEM, ONE HEAT ─────────────────────────── */}
@@ -187,21 +201,26 @@ export default function Tribe() {
         </div>
       </section>
 
-      {/* ── BEAT 7 · DEFIANCE ──────────────────────────────────── */}
+      {/* ── BEAT 7 · THE CATALOG ───────────────────────────────── */}
       <section className="wrap" style={{ paddingTop: 'var(--s-lg)', paddingBottom: 'var(--s-lg)', overflow: 'hidden' }}>
         <div className="t-reveal">
-          <Hallmark className="eyebrow gem">07 — The creed</Hallmark>
-          <h2 className="display" style={{ fontSize: 'clamp(52px,11vw,180px)', lineHeight: 0.92, letterSpacing: '-0.02em', whiteSpace: 'nowrap', marginTop: 16 }}>
-            Flag, not a faith.
+          <Hallmark className="eyebrow gem">07 — What's next</Hallmark>
+          <h2 className="display" style={{ fontSize: 'clamp(44px,9vw,150px)', lineHeight: 0.92, letterSpacing: '-0.02em', marginTop: 16 }}>
+            The Flight Tribe Catalog.
           </h2>
           <p className="body" style={{ color: 'var(--c-muted)', maxWidth: 560, marginTop: 20, lineHeight: 1.8 }}>
-            No meaning borrowed from anyone's church. We don't do symbols we can't forge. Wear the mark because it's yours.
+            We're also building the Flight Tribe Catalog — a lifestyle magazine sharing our designs, travels, inspirations, and the people and places behind the brand. This is just the beginning.
           </p>
         </div>
       </section>
 
       {/* ── BEAT 8 · CLOSE ─────────────────────────────────────── */}
       <section className="wrap" style={{ paddingBottom: 'var(--s-lg)' }}>
+        <div className="t-reveal">
+          <h2 className="display" style={{ fontSize: 'clamp(32px,5.5vw,74px)', lineHeight: 1.02, letterSpacing: '-0.02em', margin: '0 0 var(--s-md)' }}>
+            Move Different. Live Legendary.
+          </h2>
+        </div>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: 'var(--gutter)', alignItems: 'center' }}>
           <div className="t-reveal" style={{ gridColumn: '1 / span 7', display: 'flex', alignItems: 'center', gap: 20 }}>
             <EyeSigil size={30} className="gem" gem="var(--c-gem)" title="Flight Tribe" />

@@ -9,6 +9,7 @@ import Product from './pages/Product'
 import Cart from './pages/Cart'
 import Tribe from './pages/Tribe'
 import Contact from './pages/Contact'
+import Policies from './pages/Policies'
 import NotFound from './pages/NotFound'
 import { currentYearRoman } from '@/lib/year'
 
@@ -48,6 +49,7 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/tribe" element={<Tribe />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/policies" element={<Policies />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

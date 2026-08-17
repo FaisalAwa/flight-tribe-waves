@@ -96,6 +96,7 @@ export function Footer() {
             <Link className="topbar__link" to="/tribe">The Story</Link>
             <Link className="topbar__link" to="/contact">Contact</Link>
             <Link className="topbar__link" to="/cart">Bag</Link>
+            <Link className="topbar__link" to="/policies">Shop Policies</Link>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             <Hallmark className="eyebrow footer__colhead">Send Word</Hallmark>
