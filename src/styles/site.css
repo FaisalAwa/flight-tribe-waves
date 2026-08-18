@@ -119,33 +119,46 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .bag { display: inline-flex; align-items: baseline; gap: 6px; }
 .bag__n { color: var(--c-gem); font-variant-numeric: tabular-nums; }
 
-/* ─── INDEX overlay ───────────────────────────────────────────── */
-.index-overlay {
-  position: fixed; inset: 0; z-index: 95; background: var(--c-pit);
-  display: grid; grid-template-rows: 60px 1fr auto; padding: 0 var(--gutter);
+/* ─── SHOP dropdown — bold/experimental mega-style menu straight onto the
+   live catalogue categories. Big Anton display type (matches the old INDEX
+   overlay's hand), skew-in GSAP spring, gem-per-category hover preview
+   (only ONE gem is ever lit at a time — the hovered line — so the vault's
+   "one saturated colour on screen" rule still holds). ─────────────────── */
+.shop-nav { position: relative; }
+.shop-nav__trigger { gap: 8px; background: none; border: none; cursor: pointer; }
+.shop-nav__caret { transition: transform 0.3s var(--ease-slam); }
+.shop-nav__caret[data-open='true'] { transform: rotate(180deg); }
+
+.shop-drop {
+  position: absolute; top: calc(100% + 18px); left: 50%; transform: translateX(-50%);
+  z-index: 120; min-width: 300px;
+  background: var(--c-pit); border: 1px solid var(--c-line);
+  padding: clamp(20px, 2.4vw, 34px) clamp(24px, 3vw, 40px);
+  box-shadow: 0 30px 70px -12px rgba(0,0,0,0.6);
 }
-.index-overlay__top { display: flex; align-items: center; justify-content: space-between; }
-.index-list { align-self: center; display: flex; flex-direction: column; gap: clamp(2px, 1vw, 10px); }
-.index-list a {
-  position: relative; font-family: var(--f-display); text-transform: uppercase;
-  font-size: clamp(44px, 11vw, 132px); line-height: 0.98; color: var(--c-bone);
-  opacity: 0.42; transition: opacity 0.3s var(--ease-ui), padding-left 0.4s var(--ease-slam);
-  width: fit-content;
+.shop-drop__all {
+  display: block; font-family: var(--f-hall); font-size: var(--t-label); letter-spacing: 0.24em;
+  text-transform: uppercase; color: var(--c-muted); padding-bottom: 14px; margin-bottom: 14px;
+  border-bottom: 1px solid var(--c-line); transition: color 0.2s var(--ease-ui);
 }
-.index-list a:hover, .index-list a:focus-visible, .index-list a[data-active='true'] { opacity: 1; padding-left: clamp(18px, 3vw, 54px); }
-.index-list a .idx { font-family: var(--f-hall); font-size: 12px; letter-spacing: 0.2em; color: var(--c-gem-text); opacity: 0.9; vertical-align: super; margin-right: 12px; }
-.index-thumb {
-  position: fixed; z-index: -1; width: min(38vw, 460px); aspect-ratio: 4/5; object-fit: cover;
-  right: var(--gutter); top: 50%; transform: translateY(-50%);
-  opacity: 0; transition: opacity 0.4s var(--ease-ui); filter: grayscale(0.3) contrast(1.05);
-  pointer-events: none;
+.shop-drop__all:hover, .shop-drop__all:focus-visible { color: var(--c-bone); }
+.shop-drop__list { display: flex; flex-direction: column; gap: clamp(4px, 0.8vw, 10px); }
+.shop-drop__list a {
+  position: relative; display: block; width: fit-content; font-family: var(--f-display);
+  text-transform: uppercase; font-size: clamp(26px, 2.6vw, 40px); line-height: 1.02;
+  color: var(--c-bone); opacity: 0.5; white-space: nowrap;
+  transition: opacity 0.25s var(--ease-ui), padding-left 0.35s var(--ease-slam), color 0.25s var(--ease-ui);
 }
-.index-thumb[data-show='true'] { opacity: 0.5; }
-.index-overlay__foot { display: flex; justify-content: space-between; align-items: center; padding: var(--s-sm) 0; color: var(--c-muted); }
-/* eye-vesica marker that lerps to the active line (desktop) */
-.index-eye { position: absolute; left: var(--gutter); color: var(--c-gem-text); opacity: 0; transition: opacity 0.3s var(--ease-ui); pointer-events: none; }
-.index-eye[data-show='true'] { opacity: 0.9; }
-@media (max-width: 720px) { .index-thumb, .index-eye { display: none; } .index-list a:hover { padding-left: 0; } }
+.shop-drop__list a:hover, .shop-drop__list a:focus-visible {
+  opacity: 1; padding-left: clamp(12px, 1.6vw, 22px); color: var(--c-gem-text);
+}
+.shop-drop__list a .idx {
+  font-family: var(--f-hall); font-size: 11px; letter-spacing: 0.2em; color: var(--c-gem-text);
+  opacity: 0.85; vertical-align: super; margin-right: 10px;
+}
+@media (max-width: 720px) {
+  .shop-drop { position: fixed; left: var(--gutter); right: var(--gutter); top: 68px; transform: none; min-width: 0; }
+}
 
 /* ─── Eye companion — the site-wide "tribe is watching" marker that locks
    onto any hovered interactive element (see EyeCompanion.tsx). Fixed layer,
@@ -300,24 +313,24 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
    the element is void-bg or bone-fill-on-hover. Transform-only transition
    (T8). Gated to real hover+fine-pointer devices and fully removed under
    reduced-motion. */
-.btn::before, .linkline::before, .topbar__link::before, .index-list a::before {
+.btn::before, .linkline::before, .topbar__link::before, .shop-drop__list a::before {
   content: '';
   position: absolute; inset: 0; z-index: 6; pointer-events: none;
   background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.65) 50%, transparent 62%);
   mix-blend-mode: overlay;
   transform: translateX(-130%);
 }
-.btn, .linkline, .topbar__link, .index-list a { position: relative; overflow: hidden; isolation: isolate; }
+.btn, .linkline, .topbar__link, .shop-drop__list a { position: relative; overflow: hidden; isolation: isolate; }
 @media (hover: hover) and (pointer: fine) {
-  .btn::before, .linkline::before, .topbar__link::before, .index-list a::before {
+  .btn::before, .linkline::before, .topbar__link::before, .shop-drop__list a::before {
     transition: transform 0.7s var(--ease-out);
   }
-  .btn:hover::before, .linkline:hover::before, .topbar__link:hover::before, .index-list a:hover::before {
+  .btn:hover::before, .linkline:hover::before, .topbar__link:hover::before, .shop-drop__list a:hover::before {
     transform: translateX(130%);
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .btn::before, .linkline::before, .topbar__link::before, .index-list a::before { content: none; }
+  .btn::before, .linkline::before, .topbar__link::before, .shop-drop__list a::before { content: none; }
 }
 
 /* ─── Vitrine product frame ───────────────────────────────────── */
@@ -710,3 +723,27 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 }
 @keyframes toast-in { from { opacity: 0; transform: translate(-50%, 12px); } to { opacity: 1; transform: translate(-50%, 0); } }
 .toast a { color: var(--c-gem); }
+
+/* ─── Contact form — hairline-underline fields, matches the vault's
+   minimal input language (no boxes/fills, just a bottom rule that lights
+   up gem-colour on focus). ───────────────────────────────────────────── */
+.contact-form { display: flex; flex-direction: column; gap: var(--s-xs); }
+.field { display: flex; flex-direction: column; gap: 10px; }
+.field input, .field select, .field textarea {
+  font-family: var(--f-body); font-size: var(--t-body); color: var(--c-bone);
+  background: transparent; border: none; border-bottom: 1px solid var(--c-line);
+  padding: 10px 2px; transition: border-color 0.2s var(--ease-ui); resize: vertical;
+}
+.field select { cursor: pointer; }
+.field select option { background: var(--c-void); color: var(--c-bone); }
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--c-gem);
+}
+.field input[aria-invalid='true'], .field textarea[aria-invalid='true'] { border-color: var(--gem-ruby); }
+.field__error {
+  font-family: var(--f-hall); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gem-ruby-text);
+}
+@media (max-width: 860px) {
+  .contact-form, .contact-form + div { grid-column: span 12 !important; }
+}

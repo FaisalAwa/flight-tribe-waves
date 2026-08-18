@@ -64,7 +64,7 @@ export function ScrollProgress() {
         left: 0,
         right: 0,
         height: 2,
-        zIndex: 91, // above .topbar (90), below .index-overlay (95) / .toast (120)
+        zIndex: 91, // above .topbar (90), below .shop-drop / .toast (120)
         pointerEvents: 'none',
       }}
     >
