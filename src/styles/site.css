@@ -119,6 +119,20 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
 .bag { display: inline-flex; align-items: baseline; gap: 6px; }
 .bag__n { color: var(--c-gem); font-variant-numeric: tabular-nums; }
 
+/* Hamburger toggle — hidden on desktop, swaps in for .topbar__nav below
+   720px. The horizontal SHOP/OUR STORY/CONTACT US row was measured to
+   collide with the "FLIGHT TRIBE" wordmark under ~460px on real phone
+   viewports (confirmed via device-emulated testing), so it doesn't just
+   shrink — it collapses into a full-screen menu instead. */
+.topbar__burger {
+  display: none; background: none; border: none; color: var(--c-bone); cursor: pointer;
+  align-items: center; justify-content: center; width: 44px; height: 44px; margin-right: -10px;
+}
+@media (max-width: 720px) {
+  .topbar__nav { display: none; }
+  .topbar__burger { display: inline-flex; }
+}
+
 /* ─── SHOP dropdown — bold/experimental mega-style menu straight onto the
    live catalogue categories. Big Anton display type (matches the old INDEX
    overlay's hand), skew-in GSAP spring, gem-per-category hover preview
@@ -156,9 +170,44 @@ a:focus-visible, button:focus-visible, [tabindex]:focus-visible {
   font-family: var(--f-hall); font-size: 11px; letter-spacing: 0.2em; color: var(--c-gem-text);
   opacity: 0.85; vertical-align: super; margin-right: 10px;
 }
-@media (max-width: 720px) {
-  .shop-drop { position: fixed; left: var(--gutter); right: var(--gutter); top: 68px; transform: none; min-width: 0; }
+/* ─── Mobile menu — full-screen, portaled panel that replaces the desktop
+   SHOP dropdown + inline nav below 720px. Same clipPath slide-in / focus-
+   trap / scroll-lock / inert technique as FilterPanel's drawer. ───────── */
+.mobile-menu-root { position: fixed; inset: 0; z-index: 130; }
+.mobile-menu-backdrop { position: absolute; inset: 0; background: var(--c-void); }
+.mobile-menu-panel {
+  position: absolute; inset: 0; background: var(--c-pit);
+  display: flex; flex-direction: column; overflow-y: auto;
+  padding: 0 var(--gutter) var(--s-md);
 }
+.mobile-menu-head {
+  position: sticky; top: 0; z-index: 1; background: var(--c-pit);
+  display: flex; align-items: center; justify-content: space-between;
+  height: 60px; margin: 0 calc(var(--gutter) * -1); padding: 0 var(--gutter);
+  border-bottom: 1px solid var(--c-line);
+}
+.mobile-menu-close {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 44px; height: 44px; margin-right: -10px; background: none; border: none;
+  color: var(--c-chrome); cursor: pointer; transition: color 0.2s var(--ease-ui);
+}
+.mobile-menu-close:hover, .mobile-menu-close:focus-visible { color: var(--c-gem); }
+.mobile-menu-list { display: flex; flex-direction: column; gap: clamp(20px, 5vw, 32px); margin-top: var(--s-md); }
+.mobile-menu-link {
+  display: block; width: fit-content; font-family: var(--f-display); text-transform: uppercase;
+  font-size: clamp(40px, 12vw, 64px); line-height: 1; color: var(--c-bone);
+}
+.mobile-menu-link .idx {
+  font-family: var(--f-hall); font-size: 13px; letter-spacing: 0.2em; color: var(--c-gem-text);
+  opacity: 0.9; vertical-align: super; margin-right: 10px;
+}
+.mobile-menu-sub { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; padding-left: 6px; }
+.mobile-menu-sub a {
+  font-family: var(--f-hall); font-size: 15px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--c-muted); min-height: 24px; display: inline-flex; align-items: center;
+  transition: color 0.2s var(--ease-ui);
+}
+.mobile-menu-sub a:hover, .mobile-menu-sub a:focus-visible, .mobile-menu-sub a:active { color: var(--c-gem-text); }
 
 /* ─── Eye companion — the site-wide "tribe is watching" marker that locks
    onto any hovered interactive element (see EyeCompanion.tsx). Fixed layer,

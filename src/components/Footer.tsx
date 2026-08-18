@@ -77,9 +77,18 @@ export function Footer() {
           .footer__built { display: flex; justify-content: center; margin-top: var(--s-sm); color: var(--c-muted); }
           .footer__built a { color: var(--c-bone); font-weight: 700; text-decoration: none; transition: color 0.2s var(--ease-ui); }
           .footer__built a:hover, .footer__built a:focus-visible { color: var(--c-gem); }
+          /* Below 640px the 3-col grid was squeezing into a cramped 2-then-1
+             wrap (~140px columns) and the copyright/eye/tagline row's
+             space-between wrap put the eye icon on its own orphaned line —
+             both read as "misaligned". Stack everything to one left edge. */
+          @media (max-width: 640px) {
+            .footer__grid { grid-template-columns: 1fr !important; gap: var(--s-md) !important; }
+            .footer__meta { flex-direction: column !important; align-items: flex-start !important; gap: 14px !important; }
+          }
         `}</style>
 
         <div
+          className="footer__grid"
           style={{
             display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
             gap: 'var(--s-sm)', marginTop: 'var(--s-md)', color: 'var(--c-bone)',
@@ -154,6 +163,7 @@ export function Footer() {
         </div>
 
         <div
+          className="footer__meta"
           style={{
             display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap',
             gap: 20, marginTop: 'var(--s-sm)', paddingTop: 'var(--s-sm)', borderTop: '1px solid var(--c-line)',

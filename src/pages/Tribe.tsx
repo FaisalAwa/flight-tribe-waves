@@ -159,7 +159,7 @@ export default function Tribe() {
       </section>
 
       {/* ── BEAT 5.5 · THE STAKES (real product, real-world context) ── */}
-      <section className="wrap" style={{ paddingTop: 'var(--s-md)', paddingBottom: 'var(--s-lg)' }}>
+      <section className="wrap" style={{ paddingTop: 'var(--s-md)', paddingBottom: 'var(--s-md)' }}>
         <div className="t-reveal frame" style={{ aspectRatio: '16 / 9', borderRadius: 2, margin: '0 auto', maxWidth: 980 }}>
           <img
             className="frame__img" src="/assets/products/dice-cash-bw.jpg"
@@ -174,8 +174,8 @@ export default function Tribe() {
 
       {/* ── BEAT 6 · ONE GEM, ONE HEAT ─────────────────────────── */}
       <section style={{ position: 'relative', background: 'var(--c-void)', overflow: 'hidden' }}>
-        <div className="wrap" style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: 'var(--gutter)', alignItems: 'center', paddingTop: 'var(--s-lg)', paddingBottom: 'var(--s-lg)' }}>
-          <div className="t-reveal" style={{ gridColumn: '1 / span 4' }}>
+        <div className="wrap" style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: 'var(--gutter)', alignItems: 'center', paddingTop: 'var(--s-md)', paddingBottom: 'var(--s-lg)' }}>
+          <div className="t-reveal" style={{ gridColumn: '1 / span 5' }}>
             <Hallmark className="eyebrow gem">05 — One gem</Hallmark>
             <p className="display" style={{ fontSize: 'var(--t-h2)', lineHeight: 1.02, textTransform: 'none', margin: '16px 0 18px' }}>Silver stays cold so the stone can burn.</p>
             <Hallmark as="p">Amethyst · one stone · set by hand</Hallmark>
