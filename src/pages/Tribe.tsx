@@ -119,7 +119,7 @@ export default function Tribe() {
       </section>
 
       {/* ── BEAT 4 · THE TWO MARKS ─────────────────────────────── */}
-      <section className="wrap beat-marks" style={{ paddingTop: 'var(--s-lg)', paddingBottom: 'var(--s-lg)' }}>
+      <section className="wrap beat-marks" style={{ paddingTop: 'var(--s-lg)', paddingBottom: 'var(--s-md)' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: 'var(--gutter)', alignItems: 'center' }}>
           <div style={{ gridColumn: '1 / span 2', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, color: 'var(--c-chrome)' }}>
             <span className="mark-draw"><Globe size={92} weight={1.1} title="" /></span>
@@ -142,7 +142,7 @@ export default function Tribe() {
       </section>
 
       {/* ── BEAT 5 · HALLMARK LEDGER (descending stair, no row) ─── */}
-      <section className="wrap beat-ledger" style={{ position: 'relative', paddingTop: 'var(--s-md)', paddingBottom: 'var(--s-lg)', overflow: 'hidden' }}>
+      <section className="wrap beat-ledger" style={{ position: 'relative', paddingTop: 'var(--s-md)', paddingBottom: 'var(--s-md)', overflow: 'hidden' }}>
         <Hallmark className="eyebrow gem">04 — The metal</Hallmark>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(12,1fr)', gap: '10px', marginTop: 24 }}>
           {[['.925', 'Solid sterling, never plated', 1], ['USA', 'Cast + finished by hand', 4], [currentYearRoman(), 'Struck into every edge', 7]].map(([k, v, col]) => (
@@ -159,10 +159,10 @@ export default function Tribe() {
       </section>
 
       {/* ── BEAT 5.5 · THE STAKES (real product, real-world context) ── */}
-      <section className="wrap" style={{ paddingTop: 'var(--s-lg)', paddingBottom: 'var(--s-lg)' }}>
-        <div className="t-reveal frame frame--cut" style={{ aspectRatio: '21 / 9', borderRadius: 2, margin: '0 auto', maxWidth: 980 }}>
+      <section className="wrap" style={{ paddingTop: 'var(--s-md)', paddingBottom: 'var(--s-lg)' }}>
+        <div className="t-reveal frame" style={{ aspectRatio: '16 / 9', borderRadius: 2, margin: '0 auto', maxWidth: 980 }}>
           <img
-            className="frame__img frame__img--cut" src="/assets/products/dice-cash-bw.jpg"
+            className="frame__img" src="/assets/products/dice-cash-bw.jpg"
             alt="Flight Tribe Artifact Dice, hand-set in solid .925 silver"
             style={{ objectPosition: 'center 30%' }} loading="lazy"
           />
@@ -180,8 +180,8 @@ export default function Tribe() {
             <p className="display" style={{ fontSize: 'var(--t-h2)', lineHeight: 1.02, textTransform: 'none', margin: '16px 0 18px' }}>Silver stays cold so the stone can burn.</p>
             <Hallmark as="p">Amethyst · one stone · set by hand</Hallmark>
           </div>
-          <div className="frame frame--cut bleed-right" style={{ gridColumn: '7 / span 6', aspectRatio: '4 / 3', borderRadius: 2 }}>
-            <img className="frame__img frame__img--cut" src="/assets/products/winged-heart-01-cut.png" alt="Winged heart pendant, amethyst set by hand" loading="lazy" />
+          <div className="frame bleed-right" style={{ gridColumn: '7 / span 6', aspectRatio: '4 / 3', borderRadius: 2 }}>
+            <img className="frame__img" src="/assets/products/winged-heart-01-cut.png" alt="Winged heart pendant, amethyst set by hand" style={{ objectPosition: 'center 25%' }} loading="lazy" />
             <span className="frame__gemwash" style={{ opacity: 0.9 }} />
           </div>
         </div>

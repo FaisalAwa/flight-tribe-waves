@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+# TODO: swap in the real production domain once it's decided
+Sitemap: https://your-domain.example/sitemap.xml

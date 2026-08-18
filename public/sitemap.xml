@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- TODO: swap https://your-domain.example for the real production domain
+     once it's decided. Product URLs are Shopify-driven and not enumerated
+     here — add a build-time generator later if per-product SEO matters. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://your-domain.example/</loc><priority>1.0</priority></url>
+  <url><loc>https://your-domain.example/shop</loc><priority>0.9</priority></url>
+  <url><loc>https://your-domain.example/shop/jewelry</loc><priority>0.8</priority></url>
+  <url><loc>https://your-domain.example/shop/accessories</loc><priority>0.8</priority></url>
+  <url><loc>https://your-domain.example/shop/clothing</loc><priority>0.8</priority></url>
+  <url><loc>https://your-domain.example/tribe</loc><priority>0.7</priority></url>
+  <url><loc>https://your-domain.example/contact</loc><priority>0.6</priority></url>
+  <url><loc>https://your-domain.example/policies</loc><priority>0.4</priority></url>
+</urlset>

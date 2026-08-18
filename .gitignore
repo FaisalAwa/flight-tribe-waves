@@ -34,6 +34,7 @@ public/assets/*.gif
 !public/assets/bandana-meadow.mp4
 !public/assets/bandana-meadow-poster.jpg
 !public/assets/tribe-hero-bench.png
+!public/assets/og-image.png
 
 # Editor directories and files
 .vscode/*

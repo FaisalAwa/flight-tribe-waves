@@ -18,7 +18,14 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 /* Contact form — no backend on this storefront, so submission opens the
    visitor's own mail client with everything pre-filled (same pattern the
    Shop page already uses for waitlist capture), landing straight in
-   Flightxtribe@gmail.com. Zero config, zero third-party form service. */
+   Flightxtribe@gmail.com. Zero config, zero third-party form service.
+
+   Shopify's native /contact endpoint was tried and ruled out: it ships
+   X-Frame-Options: DENY / frame-ancestors 'none', so the browser hard-
+   blocks it from ever loading inside an iframe (confirmed via a live
+   network test, net::ERR_BLOCKED_BY_RESPONSE) — there's no way to submit
+   to it from a cross-origin SPA without a full top-level navigation off
+   this site to Shopify's bare confirmation page. */
 export default function Contact() {
   const [form, setForm] = useState<FormState>(EMPTY)
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
