@@ -1,0 +1,23 @@
+# Flight Tribe
+
+> Flight Tribe is a jewelry, accessories, and clothing brand founded by designer Johnny Flight — hand-cast .925 sterling silver and 24k gold, gem-set dice, winged hearts, the eagle seal, and the eye-in-vesica hallmark. Everything is hand-made in the USA. Tagline: "Move Different. Live Legendary."
+
+Flight Tribe is not a mass-market label — every piece is cast, finished, and stamped by hand, one stone at a time. The brand is for collectors, creators, travelers, and anyone who doesn't follow the crowd.
+
+## Shop
+
+- [All pieces](/shop): the full current catalogue
+- [Jewelry](/shop/jewelry): rings, pendants, and gem-set pieces
+- [Accessories](/shop/accessories): the signature gem-set sterling dice and other carry pieces
+- [Clothing](/shop/clothing)
+
+## Company
+
+- [Our Story](/tribe): the Flight Tribe origin, the bench/craft process, and the brand's two marks (the globe and the eye)
+- [Contact](/contact): custom commissions, stockist enquiries, reservations
+- [Shop Policies](/policies): shipping, returns, and order terms
+
+## Notes
+
+- Prices, stock, and product detail pages are rendered client-side from a live Shopify catalogue and change frequently — treat any cached page content as a snapshot, not current inventory.
+- Checkout happens on Shopify's own hosted checkout, not on this domain.
