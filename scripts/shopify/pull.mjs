@@ -135,6 +135,37 @@ const items = live.map((n) => {
   }
 })
 
+/* The order the catalogue is written in is the order the Vault renders, and
+   `heroProduct()` / `popularProducts()` read straight off the front of it — so
+   it is a merchandising decision, not an accident of the data.
+
+   Shopify has no global product order (only collections can be hand-sorted),
+   and CREATED_AT is an artifact of how the store was loaded: the current store
+   was populated by CSV import in the reverse order of the previous one, which
+   would have put the $88 bandana on THE BENCH in place of the 24k pendant.
+   So the running order is pinned here. A product that isn't in this list — a
+   new piece the client adds in Shopify — sorts after the pinned ones, grouped
+   by category in the same order the category nav uses. */
+const ORDER = [
+  'tree-of-life-pendant',
+  'arrowhead-pendant',
+  'pilot-pin',
+  'winged-heart-pendant',
+  'liberty-250th-dice',
+  'ruby-relic-dice',
+  'iceman-sapphire-dice',
+  'artifact-dice-collection',
+  'paperweight-pipe',
+  'hemp-bandana',
+  'silk-bandana',
+]
+const CATEGORY_ORDER = Object.values(CATEGORY).map((c) => c.id)
+const rank = (p) => {
+  const i = ORDER.indexOf(p.slug)
+  return i === -1 ? ORDER.length + CATEGORY_ORDER.indexOf(p.category) : i
+}
+items.sort((a, b) => rank(a) - rank(b) || a.name.localeCompare(b.name))
+
 const usedCategories = [...new Set(items.map((i) => i.category))]
 
 const body = `/* ═══════════════════════════════════════════════════════════════

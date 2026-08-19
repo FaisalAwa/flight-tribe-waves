@@ -60,3 +60,6 @@ public/assets/*.gif
 *.pid
 vite-dev.log
 .gstack/
+
+# local backup of the previous Shopify store's creds + generated catalogue — contains secrets
+.backup-old-store/

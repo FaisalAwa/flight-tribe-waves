@@ -5,7 +5,7 @@
    the cart to Shopify's own hosted checkout via the Storefront API.
 
    Env (.env locally, Project Settings → Environment Variables on Vercel):
-     VITE_SHOPIFY_DOMAIN=flightribe-aphxmxgd.myshopify.com
+     VITE_SHOPIFY_DOMAIN=flighttribeusa.myshopify.com
      VITE_SHOPIFY_STOREFRONT_TOKEN=…
      VITE_SHOPIFY_API_VERSION=2026-07        (optional, defaults below)
 
