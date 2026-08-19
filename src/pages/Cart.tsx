@@ -39,13 +39,19 @@ function SubtotalFigure({ value }: { value: number }) {
 export default function Cart() {
   const { items, subtotalUSD, count, shopifyEnabled, setQty, remove, clear, checkout } = useCart()
   const [busy, setBusy] = useState(false)
+  /* Shopify refused the cart — a stale variant id after a store swap, an
+     unpublished product, a revoked token. startCheckout() only logs and
+     returns null, so without this the button no-ops and reads as broken.
+     Surface it and hand the buyer the reserve path instead. */
+  const [failed, setFailed] = useState(false)
 
   const onCheckout = async () => {
     setBusy(true)
+    setFailed(false)
     const url = await checkout()
     setBusy(false)
     if (url) { window.location.href = url; return }
-    // fallback handled inline below (DM to reserve) — nothing else to do
+    setFailed(true)
   }
 
   const reserveText = encodeURIComponent(
@@ -127,6 +133,19 @@ export default function Cart() {
                 <button className="btn btn--gem btn--block" style={{ marginTop: 22 }} onClick={onCheckout} disabled={busy}>
                   {busy ? 'Opening…' : 'Checkout'}
                 </button>
+                {failed && (
+                  <div role="alert" style={{ marginTop: 18 }}>
+                    <p className="body" style={{ color: 'var(--c-gem-text)', fontSize: 13, margin: 0, lineHeight: 1.6 }}>
+                      Checkout wouldn’t open — the store didn’t accept this bag. Nothing has been charged. Reserve your piece and we’ll hold it by hand.
+                    </p>
+                    <a className="btn btn--block" style={{ marginTop: 14 }} href={`https://wa.me/?text=${reserveText}`} target="_blank" rel="noopener noreferrer">
+                      Reserve by DM →
+                    </a>
+                    <a className="btn btn--block" style={{ marginTop: 10 }} href={`mailto:Flightxtribe@gmail.com?subject=${reserveSubject}&body=${reserveText}`}>
+                      Reserve by email →
+                    </a>
+                  </div>
+                )}
               </>
             ) : (
               <>
